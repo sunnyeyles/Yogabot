@@ -82,7 +82,8 @@ export default function YogaChatbot() {
       };
 
       setMessages((prev) => [...prev, botMessage]);
-    } catch (err) {
+    } catch (error) {
+      console.error("Chat error:", error);
       const errorMessage: Message = {
         id: (Date.now() + 2).toString(),
         content: "Oops! Something went wrong. Please try again.",
