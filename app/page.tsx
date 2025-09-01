@@ -1,101 +1,19 @@
 "use client";
 
 import type React from "react";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Send,
-  Bot,
-  User,
-  Calendar,
-  Clock,
-  Heart,
-  Sparkles,
-} from "lucide-react";
-
-interface Message {
-  id: string;
-  content: string;
-  sender: "user" | "bot";
-  timestamp: Date;
-}
-
-const quickActions = [
-  { label: "Class Schedule", icon: Calendar },
-  { label: "Beginner Classes", icon: Heart },
-  { label: "Pricing", icon: Sparkles },
-  { label: "Studio Location", icon: Clock },
-];
+import { Send, Bot, User } from "lucide-react";
+import { useChat } from "@/hooks/useChat";
+import { quickActions } from "@/lib/constants";
+import ReactMarkdown from "react-markdown";
 
 export default function YogaChatbot() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      content: "Welcome! Need help with yoga classes or studio details?",
-      sender: "bot",
-      timestamp: new Date(),
-    },
-  ]);
+  const { messages, isTyping, messagesEndRef, handleSendMessage } = useChat();
   const [inputValue, setInputValue] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  const handleSendMessage = async (content: string) => {
-    if (!content.trim()) return;
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      content: content.trim(),
-      sender: "user",
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setInputValue("");
-    setIsTyping(true);
-
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: content.trim() }),
-      });
-
-      const data = await res.json();
-
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: data.reply,
-        sender: "bot",
-        timestamp: new Date(),
-      };
-
-      setMessages((prev) => [...prev, botMessage]);
-    } catch (error) {
-      console.error("Chat error:", error);
-      const errorMessage: Message = {
-        id: (Date.now() + 2).toString(),
-        content: "Oops! Something went wrong. Please try again.",
-        sender: "bot",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsTyping(false);
-      scrollToBottom();
-    }
-  };
 
   const handleQuickAction = (action: string) => {
     handleSendMessage(action);
@@ -104,6 +22,7 @@ export default function YogaChatbot() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleSendMessage(inputValue);
+    setInputValue("");
   };
 
   return (
@@ -145,9 +64,27 @@ export default function YogaChatbot() {
                     : "bg-card text-card-foreground"
                 }`}
               >
-                <p className="text-sm leading-relaxed whitespace-pre-line">
-                  {message.content}
-                </p>
+                <div className="text-sm leading-relaxed">
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => (
+                        <p className="mb-2 last:mb-0">{children}</p>
+                      ),
+                      ul: ({ children }) => (
+                        <ul className="mb-2 last:mb-0 list-disc list-inside">
+                          {children}
+                        </ul>
+                      ),
+                      ol: ({ children }) => (
+                        <ol className="mb-2 last:mb-0 list-decimal list-inside">
+                          {children}
+                        </ol>
+                      ),
+                    }}
+                  >
+                    {message.content}
+                  </ReactMarkdown>
+                </div>
                 <p className="text-xs opacity-70 mt-1">
                   {message.timestamp.toLocaleTimeString([], {
                     hour: "2-digit",
