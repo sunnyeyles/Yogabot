@@ -26,18 +26,30 @@ export default function ChatBot() {
   };
 
   return (
-    <Card className="w-full max-w-2xl h-[600px] flex flex-col shadow-lg">
+    <Card
+      className={`w-full max-w-2xl h-[600px] flex flex-col shadow-lg animate-border-glow border-2 ${
+        inputValue.trim() ? "paused" : ""
+      }`}
+    >
       {/* Header */}
       <div className="bg-primary text-primary-foreground p-4 rounded-t-lg">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary-foreground/20 rounded-full flex items-center justify-center">
-            <Bot className="w-5 h-5" />
+          <div
+            className={`w-10 h-10 bg-primary-foreground/20 rounded-full flex items-center justify-center animate-pulse-slow ${
+              inputValue.trim() ? "paused" : ""
+            }`}
+          >
+            <Bot
+              className={`w-5 h-5 animate-float ${
+                inputValue.trim() ? "paused" : ""
+              }`}
+            />
           </div>
           <div>
-            <h1 className="font-semibold text-lg">Yogabot</h1>
-            {/* <p className="text-primary-foreground/80 text-sm">
-              Your bot assistant
-            </p> */}
+            <h1 className="font-semibold text-lg animate-fade-in">Yogabot</h1>
+            <p className="text-primary-foreground/80 text-sm">
+              Some other text here maybe
+            </p>
           </div>
         </div>
       </div>
@@ -129,6 +141,37 @@ export default function ChatBot() {
             </div>
           </div>
         )}
+
+        {/* Example Questions - Show only when there's just the welcome message */}
+        {messages.length === 1 && !isTyping && (
+          <div className="flex gap-3 justify-start">
+            <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <Bot className="w-4 h-4 text-primary" />
+            </div>
+            <div className="bg-card text-card-foreground rounded-lg p-3 max-w-[80%]">
+              <p className="text-sm text-muted-foreground mb-3">
+                Here are some questions you can ask me:
+              </p>
+              <div className="space-y-2">
+                {[
+                  "What classes are good for beginners?",
+                  "How much do your passes cost?",
+                  "Can I do yoga if I have an injury?",
+                  "Guide me through finding the best class for me",
+                ].map((question, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSendMessage(question)}
+                    className="block w-full text-left text-sm text-primary hover:text-primary/80 transition-colors p-2 rounded-md hover:bg-primary/5"
+                  >
+                    {question}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         <div ref={messagesEndRef} />
       </CardContent>
 
