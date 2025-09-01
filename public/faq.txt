@@ -1,7 +1,3 @@
-Yoga Studio Knowledge Base for Chatbot
-
-
----
 
 
 ## Bot Personality
@@ -11,6 +7,8 @@ Yoga Studio Knowledge Base for Chatbot
 • Encouraging and supportive, never judgmental.
 • Explains yoga concepts simply and clearly.
 • Uses gentle emojis (🌿, 🌙, ✨) sparingly to add warmth.
+• Ask follow up Questions
+
 
 
 ---
@@ -19,12 +17,12 @@ Yoga Studio Knowledge Base for Chatbot
 ## General Studio Information
 
 
-• **Studio Hours:**9-5
-• **Address:** 53 Sydenham Road Marrickville NSW Australia 2204
-• **Contact:** [Insert phone/email here]
-• **Booking:** [Insert booking method or link here]
-• **Equipment:** Props and mats are provided, but students may bring their own if preferred.
-• **Facilities:** A bathroom can be used as a change room.
+• Studio Hours: 9-5
+• Address: 53 Sydenham Road Marrickville NSW Australia 2204
+• Contact: [Insert phone/email here]
+• Booking: [Insert booking method or link here]
+• Equipment: Props and mats are provided, but students may bring their own if preferred.
+• Facilities: A bathroom can be used as a change room.
 
 
 ---
@@ -43,9 +41,9 @@ Yes, it is important to book to ensure availability and to receive notifications
 
 **Can I do a class if I have an injury?**
 Our regular classes are designed for students who are generally well.
-• **Stiffness is not a problem.**
-• **Minor injuries** that allow you to move freely are usually fine. Just be sure to advise your teacher at the beginning of class.
-• For **more significant injuries or illness,** we recommend a **Yoga Therapy – Personal session** for one-on-one support.
+• Stiffness is not a problem.
+• Minor injuries that allow you to move freely are usually fine. Just be sure to advise your teacher at the beginning of class.
+• For more significant injuries or illness,** we recommend a **Yoga Therapy – Personal session** for one-on-one support.
 
 
 **What equipment do I need to bring?**
@@ -58,9 +56,9 @@ We have a bathroom that can be used as a change room.
 
 **How can I pause my Direct Debit or membership?**
 You may suspend your pass for holidays, business travel, illness, or injury.
-• **Notice:** 7 days’ notice is required via email.
-• **Suspension Length:** Minimum 1 week (in one-week blocks).
-• **Limit:** Maximum 3 suspensions per year.
+• Notice: 7 days’ notice is required via email.
+• Suspension Length: Minimum 1 week (in one-week blocks).
+• Limit: Maximum 3 suspensions per year.
 
 
 **Do you have pre-natal classes?**
@@ -96,25 +94,25 @@ The Intro Pass is not ideal for complete beginners. It is designed for new stude
 ## Class Types
 
 
-• **Beginning:** A structured, step-by-step approach for new students or those returning to yoga after a break. Focuses on building foundational knowledge of Iyengar yoga. Not suitable for those with chronic conditions or major injuries.
+• Beginning: A structured, step-by-step approach for new students or those returning to yoga after a break. Focuses on building foundational knowledge of Iyengar yoga. Not suitable for those with chronic conditions or major injuries.
 
 
-• **General:** Designed for students with at least one year of yoga experience. Students refine their practice and work with inversions. Not suitable for beginners.
+• General: Designed for students with at least one year of yoga experience. Students refine their practice and work with inversions. Not suitable for beginners.
 
 
-• **Experienced:** For students who have been attending classes regularly for a number of years and are familiar with inversions and their variations. These classes include more complex poses and longer holds.
+• Experienced: For students who have been attending classes regularly for a number of years and are familiar with inversions and their variations. These classes include more complex poses and longer holds.
 
 
-• **Led Practice:** For experienced students who are familiar with inversions. The teacher practices at the front of the room while students follow along. We offer Led Practices focused on Hips, Backbends, and Dynamic movements.
+• Led Practice: For experienced students who are familiar with inversions. The teacher practices at the front of the room while students follow along. We offer Led Practices focused on Hips, Backbends, and Dynamic movements.
 
 
-• **Seniors:** Specially designed for older students to enhance physical health and overall well-being. Focuses on building stability, courage, and strength. Suitable for both new and existing students.
+• Seniors: Specially designed for older students to enhance physical health and overall well-being. Focuses on building stability, courage, and strength. Suitable for both new and existing students.
 
 
-• **Dynamic Class:** A fast-moving style of class designed to build strength, endurance, and flexibility. Suitable for students at General level and above. Not suitable for beginners or those working with injuries.
+• Dynamic Class: A fast-moving style of class designed to build strength, endurance, and flexibility. Suitable for students at General level and above. Not suitable for beginners or those working with injuries.
 
 
-• **Early Rise:** A 45-minute dynamic class designed to wake up and energize the body. Suitable for students at General level and above. Not suitable for beginners.
+• Early Rise: A 45-minute dynamic class designed to wake up and energize the body. Suitable for students at General level and above. Not suitable for beginners.
 
 
 ---
@@ -123,13 +121,13 @@ The Intro Pass is not ideal for complete beginners. It is designed for new stude
 ## Yoga Therapy Classes
 
 
-• **Personal Sessions:** Specialized and highly personalized one-on-one sessions designed to support students with injuries, medical conditions, or specific individual needs. Bookings are essential.
+• Personal Sessions: Specialized and highly personalized one-on-one sessions designed to support students with injuries, medical conditions, or specific individual needs. Bookings are essential.
 
 
-• **Knees & Hips (Group):** A gentle-paced, well-supported class that uses a specialized program and props to help students with common knee and hip issues. Suitable for all levels, including beginners.
+• Knees & Hips (Group): A gentle-paced, well-supported class that uses a specialized program and props to help students with common knee and hip issues. Suitable for all levels, including beginners.
 
 
-• **Neck & Back (Group):** A gentle-paced, well-supported class that uses a specialized program and props to help students with common upper and lower spine issues. Suitable for all levels, including beginners.
+• Neck & Back (Group): A gentle-paced, well-supported class that uses a specialized program and props to help students with common upper and lower spine issues. Suitable for all levels, including beginners.
 
 
 ---
@@ -142,9 +140,9 @@ Iyengar Yoga was developed by B.K.S. Iyengar over 70 years ago. It is a dynamic,
 
 
 **What sets Iyengar Yoga apart?**
-• **Precise, detailed instruction:** Emphasis on clear teacher instruction and attention to alignment to bring the body into healthy balance.
-• **Use of props:** Items like blankets, bricks, bolsters, and belts make yoga accessible and safe for all body types and ages.
-• **Rigorous teacher training:** Iyengar Yoga maintains high standards for accreditation and ongoing teacher development. All teachers at the studio are certified by the Iyengar Yoga Association of Australia or are training under a Senior Teacher.
+• Precise, detailed instruction:** Emphasis on clear teacher instruction and attention to alignment to bring the body into healthy balance.
+• Use of props: Items like blankets, bricks, bolsters, and belts make yoga accessible and safe for all body types and ages.
+• Rigorous teacher training: Iyengar Yoga maintains high standards for accreditation and ongoing teacher development. All teachers at the studio are certified by the Iyengar Yoga Association of Australia or are training under a Senior Teacher.
 
 
 ---
