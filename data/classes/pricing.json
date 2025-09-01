@@ -1,0 +1,20 @@
+[
+  {
+    "title": "2 Week Introductory Pass",
+    "content": "**What is included?**  \nThe Intro Pass is valid for all regular classes and Yoga Therapy group classes (Knees & Hips, Neck & Back). It does not include Yoga Therapy – Personal Sessions.\n\n**Is it suitable for beginners?**  \nThe Intro Pass is not ideal for complete beginners. It is designed for new students only, and some prior yoga experience (Iyengar or other styles) is required. If you are completely new to yoga, we recommend the Unlimited 5 Week Begin Pass ($70).\n\n**What classes should I attend?**  \n• If you are still learning inversions, Begin classes are the right fit.  \n• If you are confident with inversions, you can attend General and Experienced classes.\n\n---",
+    "tags": ["classes", "beginner", "pass", "therapy", "iyengar"],
+    "priority": 10
+  },
+  {
+    "title": "Class Types",
+    "content": "• **Beginning:** A structured, step-by-step approach for new students or those returning to yoga after a break. Focuses on building foundational knowledge of Iyengar yoga. Not suitable for those with chronic conditions or major injuries.\n\n• **General:** Designed for students with at least one year of yoga experience. Students refine their practice and work with inversions. Not suitable for beginners.\n\n• **Experienced:** For students who have been attending classes regularly for a number of years and are familiar with inversions and their variations. These classes include more complex poses and longer holds.\n\n• **Led Practice:** For experienced students who are familiar with inversions. The teacher practices at the front of the room while students follow along. We offer Led Practices focused on Hips, Backbends, and Dynamic movements.\n\n• **Seniors:** Specially designed for older students to enhance physical health and overall well-being. Focuses on building stability, courage, and strength. Suitable for both new and existing students.\n\n• **Dynamic Class:** A fast-moving style of class designed to build strength, endurance, and flexibility. Suitable for students at General level and above. Not suitable for beginners or those working with injuries.\n\n• **Early Rise:** A 45-minute dynamic class designed to wake up and energize the body. Suitable for students at General level and above. Not suitable for beginners.\n\n---",
+    "tags": ["classes", "beginner", "iyengar"],
+    "priority": 9
+  },
+  {
+    "title": "Yoga Therapy Classes",
+    "content": "• **Personal Sessions:** Specialized and highly personalized one-on-one sessions designed to support students with injuries, medical conditions, or specific individual needs. Bookings are essential.\n\n• **Knees & Hips (Group):** A gentle-paced, well-supported class that uses a specialized program and props to help students with common knee and hip issues. Suitable for all levels, including beginners.\n\n• **Neck & Back (Group):** A gentle-paced, well-supported class that uses a specialized program and props to help students with common upper and lower spine issues. Suitable for all levels, including beginners.\n\n---",
+    "tags": ["classes", "booking", "beginner", "therapy"],
+    "priority": 9
+  }
+]

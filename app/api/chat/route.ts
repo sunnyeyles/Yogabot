@@ -1,26 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
 import OpenAI from "openai";
+import { KnowledgeManager } from "@/lib/knowledge";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const knowledgeManager = new KnowledgeManager();
+
 export async function POST(request: NextRequest) {
   try {
     const { message, conversationHistory } = await request.json();
 
-    const faqPath = path.join(process.cwd(), "public", "bot-knowledge.md");
-    const faqText = fs.readFileSync(faqPath, "utf8");
+    // Get relevant knowledge sections based on the user's query
+    const relevantSections = knowledgeManager.getRelevantSections(message, 8);
+    const knowledgeContent =
+      relevantSections.length > 0
+        ? relevantSections
+            .map((section) => `## ${section.title}\n\n${section.content}`)
+            .join("\n\n")
+        : knowledgeManager.getAllContent();
 
-    // Create the system message with FAQ context
+    // Create the system message with relevant knowledge context
     const systemMessage = {
       role: "system" as const,
-      content: `You are a helpful yoga studio assistant. Use the following FAQ to answer the user's question.
-FAQ:
-${faqText}
-`,
+      content: `You are a helpful yoga studio assistant. Use the following information to answer the user's question.
+
+Relevant Information:
+${knowledgeContent}
+
+Please provide helpful, accurate responses based on this information. Keep your responses concise and well-formatted. Avoid excessive line breaks and use proper spacing.`,
     };
 
     // Build the messages array with conversation history

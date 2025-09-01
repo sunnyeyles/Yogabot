@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Can I do a class if I have an injury?",
+    "content": "Our regular classes are designed for students who are generally well.\n• Stiffness is not a problem.\n• Minor injuries that allow you to move freely are usually fine. Just be sure to advise your teacher at the beginning of class.\n• For more significant injuries or illness, we recommend a Yoga Therapy – Personal session for one-on-one support.",
+    "tags": ["injury", "health", "therapy", "personal session"],
+    "priority": 8
+  },
+  {
+    "title": "Do you have pre-natal classes?",
+    "content": "We do not offer specific pre-natal classes. We also do not recommend that people who are pregnant start yoga at our studio. However, long-term students with an established relationship with our senior teachers may continue to practice, as they are trained and experienced to guide students safely during pregnancy.",
+    "tags": ["prenatal", "pregnancy", "safety"],
+    "priority": 6
+  }
+]

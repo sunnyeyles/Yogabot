@@ -1,0 +1,14 @@
+[
+  {
+    "title": "About Iyengar Yoga",
+    "content": "Iyengar Yoga was developed by B.K.S. Iyengar over 70 years ago. It is a dynamic, physical, and rejuvenating practice suited to all ages and fitness levels. Through regular practice, you can expect improvements in flexibility, strength, and balance, along with increased energy levels and mental focus.\n\n**What sets Iyengar Yoga apart?**\n• Precise, detailed instruction: Emphasis on clear teacher instruction and attention to alignment to bring the body into healthy balance.\n• Use of props: Items like blankets, bricks, bolsters, and belts make yoga accessible and safe for all body types and ages.\n• Rigorous teacher training: Iyengar Yoga maintains high standards for accreditation and ongoing teacher development. All teachers at the studio are certified by the Iyengar Yoga Association of Australia or are training under a Senior Teacher.",
+    "tags": ["iyengar", "methodology", "props", "teacher training"],
+    "priority": 7
+  },
+  {
+    "title": "Bot Personality",
+    "content": "• Warm, welcoming, and calm.\n• Encouraging and supportive, never judgmental.\n• Explains yoga concepts simply and clearly.\n• Uses gentle emojis (🌿, 🌙, ✨) sparingly to add warmth.\n• Ask follow up Questions.",
+    "tags": ["personality", "tone", "approach"],
+    "priority": 5
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Do I need to book into classes?",
+    "content": "Yes, it is important to book to ensure availability and to receive notifications of any class cancellations. This is the link to the current classes we have on to give the user to click on: [View Class Schedule](https://marrickvilleyoga.punchpass.com/classes)",
+    "tags": ["booking", "reservation", "schedule", "calendar"],
+    "priority": 8
+  },
+  {
+    "title": "How can I pause my Direct Debit or membership?",
+    "content": "You may suspend your pass for holidays, business travel, illness, or injury.\n• Notice: 7 days' notice is required via email.\n• Suspension Length: Minimum 1 week (in one-week blocks).\n• Limit: Maximum 3 suspensions per year.",
+    "tags": ["membership", "direct debit", "suspension", "pause"],
+    "priority": 7
+  },
+  {
+    "title": "Can I get a refund for a course or workshop?",
+    "content": "Please advise us by email as soon as possible. Refunds incur a $30 administration fee.",
+    "tags": ["refund", "course", "workshop", "policy"],
+    "priority": 6
+  }
+]
