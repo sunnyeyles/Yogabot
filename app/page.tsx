@@ -14,16 +14,21 @@ export default function YogaChatbot() {
         </li>
         <li className="mb-4">
           <span className="text-sm size-1">
-            For "Guide me through finding the best class for me", We can set it
-            to ask questions of our choosing. Maybe 3-4 questions so the user
-            doesn't lost interest. Maybe ask for their availability and when
-            they would like to start. At the end of the converation we can take
-            them to the right page on punchpass to book the class we reccomended
-            them in the chat. This should boost the conversion rate by removing
-            friction from the booking process, especially for people who were
-            not sure if they wanted to book or not are more likely to just pull
-            the trigger when they are taken directly to the booking page. The
-            bot is not only customer service but also a sales person.
+            For “Guide me to the best class”, the bot can ask 3–4 quick
+            questions (e.g., availability, start date) to recommend the right
+            option whether that is online or in person. At the end, it sends
+            users directly to the booking page in Punchpass. This reduces
+            friction and increases conversions — especially for people who are
+            undecided. In this way, the bot acts not just as support, but as a
+            sales assistant.
+          </span>
+        </li>
+
+        <li className="mb-4">
+          <span className="text-sm size-1">
+            We can pull all the data from emails to make sure the bot answers
+            the questions that come up often exactly as you would like them to
+            be answered.
           </span>
         </li>
         <li className="mb-4">

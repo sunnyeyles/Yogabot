@@ -46,7 +46,7 @@ export default function ChatBot() {
             />
           </div>
           <div>
-            <h1 className="font-semibold text-lg animate-fade-in">Yogabot</h1>
+            <h1 className="font-semibold text-lg animate-fade-in">Hasubot</h1>
             <p className="text-primary-foreground/80 text-sm">
               Some other text here maybe
             </p>
