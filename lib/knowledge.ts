@@ -298,69 +298,6 @@ export class KnowledgeManager {
     };
   }
 
-  public getRelevantSections(
-    query: string,
-    limit: number = 5
-  ): KnowledgeSection[] {
-    const queryLower = query.toLowerCase();
-
-    const isScheduleQuery =
-      queryLower.includes("schedule") ||
-      queryLower.includes("timetable") ||
-      queryLower.includes("calendar") ||
-      queryLower.includes("class times") ||
-      queryLower.includes("when are classes");
-
-    const scoredSections = this.knowledgeBase.sections
-      .filter((section) => {
-        if (!section || !section.tags || !Array.isArray(section.tags)) {
-          return false;
-        }
-
-        return (
-          section.tags.some((tag) => queryLower.includes(tag.toLowerCase())) ||
-          (section.content &&
-            section.content.toLowerCase().includes(queryLower)) ||
-          (section.title && section.title.toLowerCase().includes(queryLower))
-        );
-      })
-      .map((section) => {
-        let score = section.priority || 0;
-
-        if (
-          section.title.toLowerCase().includes("bot_personality") ||
-          section.title.toLowerCase().includes("bot_purpose") ||
-          section.title.toLowerCase().includes("guidelines")
-        ) {
-          score += 10;
-        }
-
-        if (
-          isScheduleQuery &&
-          section.content
-            .toLowerCase()
-            .includes("direct students to the online class calendar")
-        ) {
-          score += 20;
-        }
-
-        if (
-          isScheduleQuery &&
-          (section.content.toLowerCase().includes("retreat") ||
-            section.content.toLowerCase().includes("workshop"))
-        ) {
-          score -= 5;
-        }
-
-        return { section, score };
-      })
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit)
-      .map((item) => item.section);
-
-    return scoredSections;
-  }
-
   public getAllContent(): string {
     return this.knowledgeBase.sections
       .filter((section) => section && section.title && section.content)
