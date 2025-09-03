@@ -11,7 +11,8 @@ export interface ChatResponse {
 
 export const sendChatMessage = async (
   message: string,
-  conversationHistory: Message[]
+  conversationHistory: Message[],
+  sessionId?: string
 ): Promise<ChatResponse> => {
   const res = await fetch("/api/chat", {
     method: "POST",
@@ -22,6 +23,7 @@ export const sendChatMessage = async (
         role: msg.sender === "user" ? "user" : "assistant",
         content: msg.content,
       })),
+      sessionId: sessionId || "default",
     }),
   });
 

@@ -1,0 +1,47 @@
+{
+  "dynamic_data": {
+    "spring_special_2_for_1_september_2025": {
+      "title": "Spring Special 2 for 1",
+      "description": "Want to give yoga a try, coming back to yoga after a break or would like to add some stretching and stress relief into your routine. Come and begin yoga with us at Marrickville Yoga Centre and be part of our yoga community.",
+      "offer": "2 for 1 Pass",
+      "price": "$70",
+      "duration": "5 weeks",
+      "validity": "Pass must be started in September",
+      "details": "Begin yoga 2 for 1 - 5 weeks with a friend",
+      "target_audience": [
+        "New to yoga",
+        "Returning after a break",
+        "Looking for stretching and stress relief"
+      ],
+      "benefits": "Join our yoga community and start your practice journey",
+      "contact": "info@marrickvilleyoga.com.au"
+    },
+    "four_day_online_practice_retreat_december_2025": {
+      "title": "Four-Day Online Practice Retreat with Simon – December 2025",
+      "description": "In early December 2025, Simon will lead a four-day online retreat designed to deepen your personal yoga practice from the comfort of your own space.",
+      "schedule": [
+        "Early morning Prāṇāyāma",
+        "Two-hour morning āsana practice",
+        "Two-hour afternoon restorative session"
+      ],
+      "format": "All sessions are conducted live online. Participants are encouraged to create a quiet, supportive environment—either at home or with fellow practitioners at a local studio.",
+      "benefits": "Unique opportunity for immersive, self-directed practice with expert guidance.",
+      "registration": {
+        "contact": "info@marrickvilleyoga.com.au",
+        "instructions": "To register your interest, email the provided contact."
+      }
+    },
+    "mentorship_program_2025": {
+      "title": "Mentorship Program 2025",
+      "description": "The Teacher Mentorship Program is a professional development program designed for certified Iyengar Yoga teachers. It provides individual support to deepen personal practice, expand teaching skills, and develop a stronger understanding of Iyengar Yoga methodology.",
+      "highlights": [
+        "Individualised mentorship with Simon Joannou",
+        "Monthly consultations and guided practice",
+        "Sessions cover teaching, observation, yoga philosophy, pranayama, specialist classes, and methodology",
+        "Encourages experiential learning at Marrickville Yoga Centre, including exposure to the timetable, therapy programs, and teaching opportunities"
+      ],
+      "who_is_it_for": "Certified Iyengar Yoga teachers seeking to refine their practice, enhance teaching skills, and deepen understanding of the Iyengar methodology.",
+      "how_it_works": "A personalised program is created collaboratively with Simon based on each teacher’s goals and development needs."
+    }
+  }
+}

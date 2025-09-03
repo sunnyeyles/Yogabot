@@ -1,0 +1,133 @@
+{
+  "classes": {
+    "Beginning": {
+      "description": "Structured, step-by-step classes for students new to yoga or returning after a break. Focus on foundations, precision, alignment, and timing.",
+      "notes": "Not suitable for chronic conditions or major injuries. Consider Yoga Therapy classes if needed."
+    },
+    "General": {
+      "description": "For students with at least one year of experience. Refine practice and work with inversions (Full Arm Balance, Elbow Balance, Headstand, Shoulder Stand).",
+      "notes": "Not for beginners."
+    },
+    "Experienced": {
+      "description": "For students familiar with inversions and looking to deepen their practice. Focus on complex poses, longer holds, alignment, and integration."
+    },
+    "Led Practice": {
+      "description": "Teacher-led sessions for experienced students.",
+      "focus_areas": [
+        "Hips – mobility and opening",
+        "Backbends – energizing and opening the front body",
+        "Dynamic – active movement for strength and coordination"
+      ]
+    },
+    "Seniors": {
+      "description": "Classes for older students to enhance mobility, stability, strength, and overall wellness.",
+      "notes": "Suitable for new and experienced students."
+    },
+    "Dynamic": {
+      "description": "Fast-moving classes to build strength, endurance, and flexibility. Includes jumps and momentum-based movement.",
+      "notes": "For General level and above. Not suitable for beginners or injuries."
+    },
+    "Early Rise": {
+      "description": "45-minute dynamic class to energize the body and mind.",
+      "notes": "For General level and above. Not for beginners."
+    },
+    "Yoga Therapy – Personal": {
+      "description": "One-on-one sessions tailored for students with injuries, medical conditions, or specific individual needs.",
+      "includes": [
+        "Knees & Hips",
+        "Neck & Shoulders",
+        "Neck & Back",
+        "Restorative classes"
+      ]
+    },
+    "Yoga Therapy – Group": {
+      "description": "Structured group classes using props and specialised programs to support students with common issues. Each student follows the program at their own level.",
+      "includes": [
+        "Knees & Hips",
+        "Neck & Shoulders",
+        "Neck & Back",
+        "Restorative classes"
+      ]
+    },
+    "Knees & Hips": {
+      "description": "Gentle, supported class using props for knee and hip issues.",
+      "notes": "Suitable for all levels."
+    },
+    "Neck & Back": {
+      "description": "Gentle, supported class targeting upper and lower spine issues.",
+      "notes": "Suitable for all levels."
+    },
+    "Teacher Training Program": {
+      "description": "3-year structured program in Iyengar Yoga methodology (300 hours).",
+      "facilitators": ["Simon Joannou", "Hasu Opa Clark"],
+      "details": [
+        "Flexible pace: attend one year, take a break, restart, or complete just one year.",
+        "Costs: $2,500 per year, with deposits and instalments required.",
+        "Face-to-face and online options available."
+      ]
+    }
+  },
+  "passes_and_prices": {
+    "Begin Classes": {
+      "price": "$70",
+      "details": "Unlimited Begin classes over 5 weeks."
+    },
+    "Single Begin Class": {
+      "price": "$20",
+      "details": "Single beginner class for new students."
+    },
+    "2-Week Unlimited Pass": {
+      "price": "$80",
+      "details": "Unlimited classes for two weeks. For new students with prior yoga experience."
+    },
+    "10 Class Pack": {
+      "price": { "Online/EFTPOS": "$230", "Cash/Full-Time Students": "$215" },
+      "details": "Valid for in-studio classes except Yoga Therapy – Personal, workshops, and online."
+    },
+    "Casual": {
+      "price": { "Online/EFTPOS": "$25", "Cash/Full-Time Students": "$22" },
+      "details": "Valid for in-studio classes except Yoga Therapy – Personal, workshops, and online."
+    },
+    "Casual Online": {
+      "price": "$22",
+      "details": "Live online classes + Content Library access. Cannot be used in-studio."
+    },
+    "Seniors": {
+      "price": { "Online/EFTPOS": "$22", "Cash": "$20" },
+      "details": "For students aged 60+."
+    },
+    "Yoga Therapy – Personal": {
+      "price": "$80 per session",
+      "details": "In-studio. Book via email."
+    },
+    "Memberships": {
+      "Unlimited – Pay Weekly": {
+        "price": "$45/week",
+        "details": [
+          "Unlimited in-studio classes (excludes Yoga Therapy – Personal, workshops, online)",
+          "Minimum 3 months, up to 3 suspensions per year"
+        ]
+      },
+      "The Collective +": {
+        "price": "$60/week",
+        "details": [
+          "Unlimited in-studio classes, self-practice access, live online classes, Content Library, Wednesday/Friday group practice (6:30–8:30am)",
+          "Minimum 3 months, up to 3 suspensions per year"
+        ]
+      }
+    }
+  },
+  "2_week_unlimited_pass_faqs": {
+    "What classes are included?": [
+      "All regular classes and Yoga Therapy group classes (Knees & Hips, Neck & Shoulders, Neck & Back).",
+      "Not included: Yoga Therapy – Personal."
+    ],
+    "Is it suitable for beginners?": "Not recommended for complete beginners. Start with the Begin Pass instead.",
+    "Do I need prior experience?": "Recommended for students with some prior yoga experience. Students with long-term health conditions should consider Yoga Therapy classes.",
+    "What classes should I attend?": {
+      "New to inversions": "Begin classes",
+      "Confident with inversions": "General or Experienced classes",
+      "Explore variety": "Yoga Therapy and dynamic morning classes"
+    }
+  }
+}

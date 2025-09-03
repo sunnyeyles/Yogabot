@@ -1,0 +1,56 @@
+{
+  "general_data": {
+    "contact": {
+      "address": "Level 1 53 Sydenham Rd, Marrickville NSW, Australia 2204",
+      "in_studio_enquiries": "info@marrickvilleyoga.com.au",
+      "online_school_enquiries": "online@marrickvilleyoga.com.au"
+    },
+    "booking": {
+      "punchpass_link": "https://marrickvilleyoga.punchpass.com/calendar",
+      "online_calendar": "https://marrickvilleyoga.punchpass.com/calendar",
+      "booking_instructions": "Book your classes online through our PunchPass system or contact us directly",
+      "advance_booking": "We recommend booking classes in advance to ensure availability"
+    },
+    "about_us": {
+      "overview": "Marrickville Yoga Centre offers classes suitable for students of all levels—from beginners to developing, general, and experienced students.",
+      "services": [
+        "Yoga Therapy sessions",
+        "Regular workshops",
+        "Teacher training and professional development programs"
+      ],
+      "delivery": {
+        "in_studio": "Classes are held in our fully equipped, modern, and spacious Marrickville centre.",
+        "online": {
+          "platform": "MYC Iyengar Yoga Online",
+          "features": [
+            "Live interactive classes every week",
+            "Growing content library",
+            "Specialist classes and workshops led by internationally recognised teachers"
+          ]
+        }
+      },
+      "history": "Marrickville Yoga Centre has been part of Sydney's Inner West community since 2007.",
+      "location": {
+        "nearby": [
+          "Marrickville and Sydenham train stations",
+          "Public transport including the Sydenham metro line",
+          "Ample free parking"
+        ]
+      },
+      "iyengar_yoga": {
+        "description": "Iyengar Yoga is dynamic, physical, and rejuvenating.",
+        "suitable_for": "All ages and fitness levels",
+        "focus": ["Precision", "Alignment", "Sequencing"],
+        "use_of_props": "Props are used appropriately to support safe practice.",
+        "teaching_style": "Teachers monitor students and provide adjustments to ensure effective learning."
+      },
+      "benefits": [
+        "Improved flexibility, strength, and balance",
+        "Increased energy and stamina",
+        "Enhanced mental focus and confidence"
+      ],
+      "teachers": "All teachers are certified by the Iyengar Yoga Association of Australia or are training under Senior Teacher Simon Joannou.",
+      "environment": "Our studio provides a welcoming, supportive, and inclusive environment for all students."
+    }
+  }
+}

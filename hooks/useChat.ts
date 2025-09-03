@@ -12,6 +12,9 @@ export const useChat = () => {
   const [messages, setMessages] = useState<Message[]>([initialMessage]);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [sessionId] = useState(
+    () => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+  );
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -38,7 +41,7 @@ export const useChat = () => {
       // Get current conversation history (including the new user message)
       const currentMessages = [...messages, userMessage];
 
-      const data = await sendChatMessage(content, currentMessages);
+      const data = await sendChatMessage(content, currentMessages, sessionId);
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
