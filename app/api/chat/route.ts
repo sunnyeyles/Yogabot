@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { KnowledgeManager } from "@/lib/knowledge";
 import { checkRateLimit, rateLimitHeaders } from "@/lib/rateLimit";
-
+import { IMPORTANT_INSTRUCTIONS } from "@/lib/constants";
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -40,15 +40,7 @@ export async function POST(request: NextRequest) {
 
 Complete Knowledge Base:
 ${knowledgeContent}
-
-IMPORTANT INSTRUCTIONS:
-- When users ask about schedules, timetables, or booking classes, always direct them to our online PunchPass system at https://marrickvilleyoga.punchpass.com/calendar
-- When users ask about location, address, or where the studio is, always provide the complete address: "Level 1 53 Sydenham Rd, Marrickville NSW, Australia 2204"
-- When users ask about pricing or passes, provide comprehensive information from the knowledge base
-- When users ask about classes or what's available, give detailed information about our offerings
-- Always be helpful, accurate, and provide complete information based on what you know
-- If you don't have specific information, direct users to contact us at info@marrickvilleyoga.com.au
-
+${IMPORTANT_INSTRUCTIONS}
 Please provide helpful, accurate responses based on this information. Keep your responses concise but comprehensive.`,
         },
         ...conversationHistory,

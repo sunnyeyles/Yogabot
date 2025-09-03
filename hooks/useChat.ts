@@ -49,7 +49,7 @@ export const useChat = () => {
             const welcomeBack: Message = {
               id: `${Date.now()}_welcome_back`,
               content:
-                "Welcome back! I saved our previous conversation. How can I help you today?",
+                "Welcome back! How can I help you today?",
               sender: "bot",
               timestamp: new Date(),
             };

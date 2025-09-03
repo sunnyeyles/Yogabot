@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Send, Bot, User } from "lucide-react";
 import { useChat } from "@/hooks/useChat";
-import { quickActions } from "@/lib/constants";
+import { quickActions, suggestedQuestions } from "@/lib/constants";
 import ReactMarkdown from "react-markdown";
 
 export default function ChatBot() {
@@ -143,30 +143,17 @@ export default function ChatBot() {
 
         {/* Example Questions - Show only when there's just the welcome message */}
         {messages.length === 1 && !isTyping && (
-          <div className="flex gap-3 justify-start">
-            <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-              <Bot className="w-4 h-4 text-primary" />
-            </div>
-            <div className="bg-card text-card-foreground rounded-lg p-3 max-w-[80%]">
-              <p className="text-sm text-muted-foreground mb-3">
-                Here are some questions you can ask me:
-              </p>
-              <div className="space-y-2">
-                {[
-                  "What classes are good for beginners?",
-                  "How much do your passes cost?",
-                  "Can I do yoga if I have an injury?",
-                  "Guide me through finding the best class for me",
-                ].map((question, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleSendMessage(question)}
-                    className="block w-full text-left text-sm text-primary hover:text-primary/80 transition-colors p-2 rounded-md hover:bg-primary/5"
-                  >
-                    {question}
-                  </button>
-                ))}
-              </div>
+          <div className="flex justify-end">
+            <div className="flex flex-col gap-2 max-w-[80%] items-end">
+              {suggestedQuestions.map((question, index) => (
+                <div
+                  key={index}
+                  className="rounded-xl py-1 px-4 border-1 border-primary/40 text-primary cursor-pointer hover:text-white hover:bg-primary/90 transition-colors"
+                  onClick={() => handleSendMessage(question)}
+                >
+                  <span className="text-sm leading-relaxed">{question}</span>
+                </div>
+              ))}
             </div>
           </div>
         )}
