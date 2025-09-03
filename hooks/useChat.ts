@@ -38,7 +38,6 @@ export const useChat = () => {
     setIsTyping(true);
 
     try {
-      // Get current conversation history (including the new user message)
       const currentMessages = [...messages, userMessage];
 
       const data = await sendChatMessage(content, currentMessages, sessionId);

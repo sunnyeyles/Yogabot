@@ -23,15 +23,13 @@ export class KnowledgeManager {
     this.knowledgeBase = this.loadKnowledge();
   }
 
-  // Convert object data to knowledge sections
   private convertObjectToSections(
-    obj: any,
-    fileName: string
+    obj: Record<string, unknown>
   ): KnowledgeSection[] {
     const sections: KnowledgeSection[] = [];
 
     const processObject = (
-      data: any,
+      data: Record<string, unknown>,
       prefix: string = "",
       priority: number = 5
     ) => {
@@ -40,7 +38,6 @@ export class KnowledgeManager {
           const currentPrefix = prefix ? `${prefix} - ${key}` : key;
 
           if (typeof value === "string") {
-            // Convert string values to sections
             sections.push({
               title: currentPrefix,
               content: value,
@@ -48,9 +45,7 @@ export class KnowledgeManager {
               priority: priority,
             });
           } else if (Array.isArray(value)) {
-            // Convert array values to sections
             if (value.every((item) => typeof item === "string")) {
-              // For arrays of strings, create a section with all items
               const content = value.map((item) => `• ${item}`).join("\n");
               sections.push({
                 title: currentPrefix,
@@ -59,7 +54,6 @@ export class KnowledgeManager {
                 priority: priority,
               });
 
-              // Also create individual sections for each item if it's important
               if (
                 key === "guidelines" ||
                 key === "purpose" ||
@@ -71,16 +65,15 @@ export class KnowledgeManager {
                     title: `${currentPrefix} - ${index + 1}`,
                     content: item,
                     tags: this.extractTags(item, item),
-                    priority: priority + 2, // Higher priority for bot personality items
+                    priority: priority + 2,
                   });
                 });
               }
             } else {
-              // Recursively process array items
               value.forEach((item, index) => {
                 if (typeof item === "object" && item !== null) {
                   processObject(
-                    item,
+                    item as Record<string, unknown>,
                     `${currentPrefix} ${index + 1}`,
                     priority - 1
                   );
@@ -88,12 +81,19 @@ export class KnowledgeManager {
               });
             }
           } else if (typeof value === "object" && value !== null) {
-            // Special handling for pricing information
             if (key === "passes_and_prices" || key === "price") {
-              this.processPricingData(value, currentPrefix, sections, priority);
+              this.processPricingData(
+                value as Record<string, unknown>,
+                currentPrefix,
+                sections,
+                priority
+              );
             } else {
-              // Recursively process nested objects
-              processObject(value, currentPrefix, priority - 1);
+              processObject(
+                value as Record<string, unknown>,
+                currentPrefix,
+                priority - 1
+              );
             }
           }
         }
@@ -104,25 +104,24 @@ export class KnowledgeManager {
     return sections;
   }
 
-  // Special method to handle pricing data
   private processPricingData(
-    pricingData: any,
+    pricingData: Record<string, unknown>,
     prefix: string,
     sections: KnowledgeSection[],
     priority: number
   ) {
     for (const [itemName, itemData] of Object.entries(pricingData)) {
       if (typeof itemData === "object" && itemData !== null) {
-        const data = itemData as any; // Type assertion for dynamic access
+        const data = itemData as Record<string, unknown>;
         let content = "";
-        let tags = ["pricing", "pass", "membership"];
 
-        // Handle different pricing structures
         if (data.price) {
           if (typeof data.price === "string") {
             content = `Price: ${data.price}`;
           } else if (typeof data.price === "object") {
-            const priceDetails = Object.entries(data.price)
+            const priceDetails = Object.entries(
+              data.price as Record<string, unknown>
+            )
               .map(([method, amount]) => `${method}: ${amount}`)
               .join(", ");
             content = `Price: ${priceDetails}`;
@@ -133,8 +132,8 @@ export class KnowledgeManager {
           if (typeof data.details === "string") {
             content += `\n\nDetails: ${data.details}`;
           } else if (Array.isArray(data.details)) {
-            content += `\n\nDetails:\n${data.details
-              .map((d: any) => `• ${d}`)
+            content += `\n\nDetails:\n${(data.details as string[])
+              .map((d: string) => `• ${d}`)
               .join("\n")}`;
           }
         }
@@ -152,19 +151,17 @@ export class KnowledgeManager {
             title: `${prefix} - ${itemName}`,
             content: content.trim(),
             tags: this.extractTags(itemName, content),
-            priority: priority + 1, // Higher priority for pricing info
+            priority: priority + 1,
           });
         }
       }
     }
   }
 
-  // Extract tags from title and content
   private extractTags(title: string, content: string): string[] {
     const text = `${title} ${content}`.toLowerCase();
     const tags: string[] = [];
 
-    // Common keywords for yoga studio
     const keywords = [
       "pricing",
       "classes",
@@ -233,39 +230,35 @@ export class KnowledgeManager {
     return tags;
   }
 
-  // Validate if an object is a valid knowledge section
-  private isValidKnowledgeSection(item: any): item is KnowledgeSection {
+  private isValidKnowledgeSection(item: unknown): item is KnowledgeSection {
+    if (!item || typeof item !== "object" || item === null) {
+      return false;
+    }
+
+    const obj = item as Record<string, unknown>;
     return (
-      item &&
-      typeof item.title === "string" &&
-      typeof item.content === "string" &&
-      Array.isArray(item.tags) &&
-      typeof item.priority === "number"
+      typeof obj.title === "string" &&
+      typeof obj.content === "string" &&
+      Array.isArray(obj.tags) &&
+      typeof obj.priority === "number"
     );
   }
 
   private loadKnowledge(): KnowledgeBase {
-    const dataDir = path.join(process.cwd(), "data");
     const sections: KnowledgeSection[] = [];
 
-    // Load all JSON files from data directory
+    const dataDir = path.join(process.cwd(), "data");
+
     const loadSection = (filePath: string): KnowledgeSection[] => {
       try {
         const content = fs.readFileSync(filePath, "utf8");
         const data = JSON.parse(content);
 
-        // Handle different JSON structures
         if (Array.isArray(data)) {
-          // If it's already an array, validate each item
           return data.filter((item) => this.isValidKnowledgeSection(item));
         } else if (typeof data === "object" && data !== null) {
-          // If it's an object, convert it to knowledge sections
           const convertedSections = this.convertObjectToSections(
-            data,
-            path.basename(filePath, ".json")
-          );
-          console.log(
-            `Loaded ${convertedSections.length} sections from ${filePath}`
+            data as Record<string, unknown>
           );
           return convertedSections;
         }
@@ -277,7 +270,6 @@ export class KnowledgeManager {
       }
     };
 
-    // Recursively load all JSON files
     const loadDirectory = (dir: string): void => {
       const files = fs.readdirSync(dir);
 
@@ -297,12 +289,6 @@ export class KnowledgeManager {
       loadDirectory(dataDir);
     }
 
-    console.log(`Total sections loaded: ${sections.length}`);
-    console.log(
-      `Sample sections:`,
-      sections.slice(0, 3).map((s) => ({ title: s.title, tags: s.tags }))
-    );
-
     return {
       sections,
       metadata: {
@@ -316,10 +302,8 @@ export class KnowledgeManager {
     query: string,
     limit: number = 5
   ): KnowledgeSection[] {
-    // Simple keyword matching - could be enhanced with embeddings
     const queryLower = query.toLowerCase();
 
-    // Check if this is a schedule-related query
     const isScheduleQuery =
       queryLower.includes("schedule") ||
       queryLower.includes("timetable") ||
@@ -327,10 +311,8 @@ export class KnowledgeManager {
       queryLower.includes("class times") ||
       queryLower.includes("when are classes");
 
-    // Get all sections and score them
     const scoredSections = this.knowledgeBase.sections
       .filter((section) => {
-        // Add safety checks for missing properties
         if (!section || !section.tags || !Array.isArray(section.tags)) {
           return false;
         }
@@ -345,7 +327,6 @@ export class KnowledgeManager {
       .map((section) => {
         let score = section.priority || 0;
 
-        // Boost bot personality and purpose sections
         if (
           section.title.toLowerCase().includes("bot_personality") ||
           section.title.toLowerCase().includes("bot_purpose") ||
@@ -354,7 +335,6 @@ export class KnowledgeManager {
           score += 10;
         }
 
-        // For schedule queries, prioritize sections that mention directing to calendar/timetables
         if (
           isScheduleQuery &&
           section.content
@@ -364,7 +344,6 @@ export class KnowledgeManager {
           score += 20;
         }
 
-        // For schedule queries, deprioritize sections about specific events/retreats
         if (
           isScheduleQuery &&
           (section.content.toLowerCase().includes("retreat") ||
