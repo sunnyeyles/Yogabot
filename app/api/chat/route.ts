@@ -3,15 +3,40 @@ import OpenAI from "openai";
 import { KnowledgeManager } from "@/lib/knowledge";
 import { checkRateLimit, rateLimitHeaders } from "@/lib/rateLimit";
 import { IMPORTANT_INSTRUCTIONS } from "@/lib/constants";
+import { storeChatMessage, getChatHistory } from "@/lib/redis";
+import { sanitizeIP } from "@/lib/utils";
+
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 const knowledgeManager = new KnowledgeManager();
 
+// Helper function to get client IP address
+const getClientIP = (request: NextRequest): string => {
+  // Try to get IP from various headers
+  const forwarded = request.headers.get("x-forwarded-for");
+  const realIP = request.headers.get("x-real-ip");
+  const cfConnectingIP = request.headers.get("cf-connecting-ip");
+
+  let clientIP = "unknown";
+
+  if (forwarded) {
+    clientIP = forwarded.split(",")[0].trim();
+  } else if (realIP) {
+    clientIP = realIP;
+  } else if (cfConnectingIP) {
+    clientIP = cfConnectingIP;
+  }
+
+  // Sanitize and validate the IP address
+  return sanitizeIP(clientIP);
+};
+
 export async function POST(request: NextRequest) {
   try {
     const { message, conversationHistory, sessionId } = await request.json();
+    const clientIP = getClientIP(request);
 
     // Enforce rate limit per session (fallback to IP)
     const rl = checkRateLimit(request, sessionId);
@@ -27,6 +52,15 @@ export async function POST(request: NextRequest) {
         }
       );
     }
+
+    // Store user message in Redis
+    const userMessage = {
+      id: Date.now().toString(),
+      content: message.trim(),
+      sender: "user" as const,
+      timestamp: new Date(),
+    };
+    await storeChatMessage(clientIP, userMessage);
 
     // Get all available knowledge to let the AI handle the logic
     const knowledgeContent = knowledgeManager.getAllContent();
@@ -55,11 +89,39 @@ Please provide helpful, accurate responses based on this information. Keep your 
       .replace(/\s+$/gm, "")
       .trim();
 
+    // Store bot response in Redis
+    const botMessage = {
+      id: (Date.now() + 1).toString(),
+      content: reply,
+      sender: "bot" as const,
+      timestamp: new Date(),
+    };
+    await storeChatMessage(clientIP, botMessage);
+
     return NextResponse.json({ reply });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { reply: "Oops! Something went wrong." },
+      { status: 500 }
+    );
+  }
+}
+
+// GET endpoint to retrieve chat history for an IP address
+export async function GET(request: NextRequest) {
+  try {
+    const clientIP = getClientIP(request);
+    const chatHistory = await getChatHistory(clientIP);
+
+    return NextResponse.json({
+      messages: chatHistory,
+      ip: clientIP,
+    });
+  } catch (error) {
+    console.error("Error retrieving chat history:", error);
+    return NextResponse.json(
+      { messages: [], error: "Failed to retrieve chat history" },
       { status: 500 }
     );
   }

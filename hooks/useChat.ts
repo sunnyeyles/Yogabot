@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Message, sendChatMessage } from "@/lib/chat";
+import { ensureValidTimestamp } from "@/lib/utils";
 
 const initialMessage: Message = {
   id: "1",
@@ -7,9 +8,6 @@ const initialMessage: Message = {
   sender: "bot",
   timestamp: new Date(),
 };
-
-const STORAGE_MESSAGES_KEY = "chat:messages";
-const STORAGE_WELCOME_DATE_KEY = "chat:lastWelcomeDate";
 
 export const useChat = () => {
   const [messages, setMessages] = useState<Message[]>([initialMessage]);
@@ -23,66 +21,42 @@ export const useChat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Load messages from localStorage on mount and optionally append a welcome-back
+  // Load messages from Redis on mount
   useEffect(() => {
-    try {
-      const raw =
-        typeof window !== "undefined"
-          ? localStorage.getItem(STORAGE_MESSAGES_KEY)
-          : null;
-      if (raw) {
-        const parsed: Array<
-          Omit<Message, "timestamp"> & { timestamp: string }
-        > = JSON.parse(raw);
-        const restored: Message[] = parsed.map((m, idx) => ({
-          ...m,
-          // Ensure unique ids even if old ones clash
-          id: m.id || `${Date.now()}_${idx}`,
-          timestamp: new Date(m.timestamp),
-        }));
+    const loadChatHistory = async () => {
+      try {
+        const response = await fetch("/api/chat");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.messages && data.messages.length > 0) {
+            // Ensure all messages have valid timestamps
+            const validatedMessages = data.messages.map((msg: any) => ({
+              ...msg,
+              timestamp: ensureValidTimestamp(msg.timestamp),
+            }));
 
-        // If there is prior history, add a once-per-day "Welcome back" message
-        if (restored.length > 0) {
-          const today = new Date().toISOString().slice(0, 10);
-          const lastWelcomed = localStorage.getItem(STORAGE_WELCOME_DATE_KEY);
-          if (lastWelcomed !== today) {
+            // If there is prior history, add a welcome back message
             const welcomeBack: Message = {
               id: `${Date.now()}_welcome_back`,
-              content:
-                "Welcome back! How can I help you today?",
+              content: "Welcome back! How can I help you today?",
               sender: "bot",
               timestamp: new Date(),
             };
-            setMessages([...restored, welcomeBack]);
-            localStorage.setItem(STORAGE_WELCOME_DATE_KEY, today);
+            setMessages([...validatedMessages, welcomeBack]);
             return;
           }
         }
-
-        setMessages(restored);
+        // If no history or error, keep the initial message
+        setMessages([initialMessage]);
+      } catch (error) {
+        console.error("Failed to load chat history:", error);
+        // Fallback to initial message on error
+        setMessages([initialMessage]);
       }
-    } catch {
-      // Ignore parse/storage errors and fall back to default
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    };
 
-  // Persist messages to localStorage whenever they change
-  useEffect(() => {
-    try {
-      if (typeof window === "undefined") return;
-      const serializable = messages.map((m) => ({
-        ...m,
-        timestamp:
-          m.timestamp instanceof Date
-            ? m.timestamp.toISOString()
-            : new Date(m.timestamp).toISOString(),
-      }));
-      localStorage.setItem(STORAGE_MESSAGES_KEY, JSON.stringify(serializable));
-    } catch {
-      // Ignore storage errors
-    }
-  }, [messages]);
+    loadChatHistory();
+  }, []);
 
   useEffect(() => {
     scrollToBottom();

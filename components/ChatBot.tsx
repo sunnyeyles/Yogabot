@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Send, Bot, User } from "lucide-react";
 import { useChat } from "@/hooks/useChat";
 import { quickActions, suggestedQuestions } from "@/lib/constants";
+import { formatTimestamp } from "@/lib/utils";
+import ClientOnly from "@/components/ClientOnly";
 import ReactMarkdown from "react-markdown";
 
 export default function ChatBot() {
@@ -57,7 +59,7 @@ export default function ChatBot() {
       <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
           <div
-            key={message.id}
+            key={`${message.id}-${message.timestamp.getTime()}`}
             className={`flex gap-3 ${
               message.sender === "user" ? "justify-end" : "justify-start"
             }`}
@@ -106,10 +108,9 @@ export default function ChatBot() {
                 </ReactMarkdown>
               </div>
               <p className="text-xs opacity-70 mt-1">
-                {message.timestamp.toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
+                <ClientOnly fallback="--:--">
+                  {formatTimestamp(message.timestamp)}
+                </ClientOnly>
               </p>
             </div>
             {message.sender === "user" && (
