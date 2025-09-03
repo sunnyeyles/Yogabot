@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { KnowledgeManager } from "@/lib/knowledge";
+import { checkRateLimit, rateLimitHeaders } from "@/lib/rateLimit";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -11,6 +12,21 @@ const knowledgeManager = new KnowledgeManager();
 export async function POST(request: NextRequest) {
   try {
     const { message, conversationHistory, sessionId } = await request.json();
+
+    // Enforce rate limit per session (fallback to IP)
+    const rl = checkRateLimit(request, sessionId);
+    if (rl.limited) {
+      return NextResponse.json(
+        {
+          reply:
+            "Rate limit exceeded. Please try again later. You can send up to 15 messages per hour.",
+        },
+        {
+          status: 429,
+          headers: rateLimitHeaders(rl),
+        }
+      );
+    }
 
     // Get all available knowledge to let the AI handle the logic
     const knowledgeContent = knowledgeManager.getAllContent();
