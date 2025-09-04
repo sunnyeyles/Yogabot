@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     const clientIP = getClientIP(request);
 
     // Enforce rate limit per session (fallback to IP)
-    const rl = checkRateLimit(request, sessionId);
+    const rl = await checkRateLimit(request, sessionId);
     if (rl.limited) {
       return NextResponse.json(
         {

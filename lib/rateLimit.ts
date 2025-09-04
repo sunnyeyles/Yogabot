@@ -1,18 +1,13 @@
 import type { NextRequest } from "next/server";
+import {
+  checkRateLimit as redisCheckRateLimit,
+  type RateLimitResult,
+} from "@/lib/redis";
 
-export interface RateLimitResult {
-  limited: boolean;
-  remaining: number;
-  resetMs: number;
-}
-
-const RATE_LIMIT_MAX = 15; // messages per window
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
-
-const rateLimitStore = new Map<
-  string,
-  { count: number; windowStart: number }
->();
+const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || "15");
+const RATE_LIMIT_WINDOW_MS = parseInt(
+  process.env.RATE_LIMIT_WINDOW_MS || "3600000"
+); // 1 hour
 
 function getClientKey(request: NextRequest, sessionId?: string): string {
   if (sessionId) return `session:${sessionId}`;
@@ -23,43 +18,12 @@ function getClientKey(request: NextRequest, sessionId?: string): string {
   return `ip:${ip}`;
 }
 
-export function checkRateLimit(
+export async function checkRateLimit(
   request: NextRequest,
   sessionId?: string
-): RateLimitResult {
+): Promise<RateLimitResult> {
   const key = getClientKey(request, sessionId);
-  const now = Date.now();
-  const entry = rateLimitStore.get(key);
-
-  if (!entry) {
-    rateLimitStore.set(key, { count: 1, windowStart: now });
-    return {
-      limited: false,
-      remaining: RATE_LIMIT_MAX - 1,
-      resetMs: RATE_LIMIT_WINDOW_MS,
-    };
-  }
-
-  if (now - entry.windowStart >= RATE_LIMIT_WINDOW_MS) {
-    entry.count = 1;
-    entry.windowStart = now;
-    rateLimitStore.set(key, entry);
-    return {
-      limited: false,
-      remaining: RATE_LIMIT_MAX - 1,
-      resetMs: RATE_LIMIT_WINDOW_MS,
-    };
-  }
-
-  if (entry.count >= RATE_LIMIT_MAX) {
-    const resetMs = RATE_LIMIT_WINDOW_MS - (now - entry.windowStart);
-    return { limited: true, remaining: 0, resetMs };
-  }
-
-  entry.count += 1;
-  rateLimitStore.set(key, entry);
-  const resetMs = RATE_LIMIT_WINDOW_MS - (now - entry.windowStart);
-  return { limited: false, remaining: RATE_LIMIT_MAX - entry.count, resetMs };
+  return await redisCheckRateLimit(key, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS);
 }
 
 export const rateLimitHeaders = (result: RateLimitResult) => ({
