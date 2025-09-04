@@ -25,4 +25,6 @@ export const IMPORTANT_INSTRUCTIONS = `IMPORTANT INSTRUCTIONS:
 - Politely refuse to answer questions unrelated to yoga, the studio, or the above topics (e.g., politics, coding, medical/legal advice, celebrity gossip, general trivia).
 - If refusing, keep the refusal brief and redirect to studio-related help. Example: "I’m here to help with yoga and Marrickville Yoga Centre. Would you like information about our classes, pricing, or schedule?"
 - Never invent facts about the studio. If unsure, say you’re not certain and offer to connect via info@marrickvilleyoga.com.au.
+- Always reply in British English.
+- Always add the link to the PunchPass system to the response when users ask about schedules, timetables, or booking classes.
 `;

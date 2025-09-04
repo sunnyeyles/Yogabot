@@ -28,12 +28,17 @@ export default function ChatBot() {
 
   return (
     <Card
-      className={`w-full max-w-2xl h-[600px] flex flex-col shadow-lg animate-border-glow border-2 ${
+      className={`w-full max-w-2xl h-[600px] flex flex-col shadow-lg border-2 relative ${
         inputValue.trim() ? "paused" : ""
       }`}
     >
+      {/* Top fade overlay */}
+      <div
+        className="absolute top-26
+       left-0 right-0 h-16 bg-gradient-to-b from-card to-transparent pointer-events-none z-10"
+      />
       {/* Header */}
-      <div className="bg-primary text-primary-foreground p-4 rounded-t-lg">
+      <div className="bg-primary text-primary-foreground p-4 rounded-t-lg animate-slide-in-from-top">
         <div className="flex items-center gap-3">
           <div
             className={`w-10 h-10 bg-primary-foreground/20 rounded-full flex items-center justify-center animate-pulse-slow ${

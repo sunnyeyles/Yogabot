@@ -3,6 +3,7 @@ export interface Message {
   content: string;
   sender: "user" | "bot";
   timestamp: Date;
+  isNew?: boolean;
 }
 
 export interface ChatResponse {
