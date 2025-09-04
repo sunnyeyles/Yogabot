@@ -195,11 +195,6 @@ Admin endpoint for monitoring:
 - Chat expiration: 30 days
 - Automatic reconnection handling
 
-### AI Configuration
-
-- Model: GPT-4o-mini
-- Temperature: Default OpenAI settings
-- Context: Yoga studio knowledge base
 
 ## Deployment
 
@@ -211,21 +206,7 @@ Ensure all required environment variables are set:
 - `REDIS_URL`: Redis connection string
 - Optional rate limiting variables
 
-### Redis Setup
 
-For production, consider:
-
-- Redis Cloud
-- AWS ElastiCache
-- Google Cloud Memorystore
-- Azure Cache for Redis
-
-### Build and Deploy
-
-```bash
-pnpm build
-pnpm start
-```
 
 ## Development
 
@@ -260,13 +241,6 @@ pnpm start
 - Error handling and fallbacks
 - Data validation and sanitization
 
-### User Experience
-
-- Responsive design for all devices
-- Smooth animations and transitions
-- Quick action buttons for common queries
-- Suggested questions for new users
-- Professional visual design
 
 ## Troubleshooting
 
@@ -297,22 +271,3 @@ Enable debug logging by setting:
 NODE_ENV=development
 ```
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License.
-
-## Support
-
-For support or questions:
-
-- Email: info@marrickvilleyoga.com.au
-- Check the troubleshooting section
-- Review the API documentation

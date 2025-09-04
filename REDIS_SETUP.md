@@ -35,15 +35,6 @@ REDIS_URL=redis://localhost:6379
    sudo systemctl start redis-server
    ```
 
-### Production
-
-For production, consider using:
-
-- Redis Cloud
-- AWS ElastiCache
-- Google Cloud Memorystore
-- Azure Cache for Redis
-
 ## Features
 
 - **IP-based Storage**: Chat messages are stored by client IP address
