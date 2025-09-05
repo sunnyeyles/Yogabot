@@ -55,8 +55,12 @@ OPENAI_API_KEY=your_openai_api_key_here
 REDIS_URL=redis://localhost:6379
 
 # Rate Limiting (optional)
-RATE_LIMIT_MAX_REQUESTS=15
-RATE_LIMIT_WINDOW_MS=3600000
+RATE_LIMIT_MAX_REQUESTS=150
+RATE_LIMIT_WINDOW_MS=300000
+
+# OpenAI API Rate Limiting (optional)
+OPENAI_RATE_LIMIT_MAX_REQUESTS=150
+OPENAI_RATE_LIMIT_WINDOW_MS=300000
 ```
 
 4. Start Redis server:
@@ -183,18 +187,24 @@ Admin endpoint for monitoring:
 
 ### Rate Limiting
 
-- Redis-based sliding window rate limiting
-- Default: 15 messages per hour per IP
-- Persistent across server restarts
-- Configurable via environment variables
-- Automatic rate limit headers
+- **User Rate Limiting**: Redis-based sliding window rate limiting
+
+  - Default: 150 messages per 5 minutes per IP
+  - Persistent across server restarts
+  - Configurable via environment variables
+  - Automatic rate limit headers
+
+- **OpenAI API Rate Limiting**: Prevents hitting OpenAI's rate limits
+  - Default: 150 API calls per 5 minutes (global)
+  - Protects against excessive API usage and costs
+  - Returns 503 status when limit exceeded
+  - Configurable via environment variables
 
 ### Redis Settings
 
 - Default connection: localhost:6379
 - Chat expiration: 30 days
 - Automatic reconnection handling
-
 
 ## Deployment
 
@@ -205,8 +215,6 @@ Ensure all required environment variables are set:
 - `OPENAI_API_KEY`: Your OpenAI API key
 - `REDIS_URL`: Redis connection string
 - Optional rate limiting variables
-
-
 
 ## Development
 
@@ -241,7 +249,6 @@ Ensure all required environment variables are set:
 - Error handling and fallbacks
 - Data validation and sanitization
 
-
 ## Troubleshooting
 
 ### Common Issues
@@ -270,4 +277,3 @@ Enable debug logging by setting:
 ```bash
 NODE_ENV=development
 ```
-

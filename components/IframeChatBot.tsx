@@ -12,7 +12,7 @@ import { formatTimestamp } from "@/lib/utils";
 import ClientOnly from "@/components/ClientOnly";
 import ReactMarkdown from "react-markdown";
 
-export default function ChatBot() {
+export default function IframeChatBot() {
   const { messages, isTyping, messagesEndRef, handleSendMessage } = useChat();
   const [inputValue, setInputValue] = useState("");
 
@@ -28,55 +28,57 @@ export default function ChatBot() {
 
   return (
     <Card
-      className={`w-full max-w-2xl h-[600px] flex flex-col shadow-lg border-2 relative ${
+      className={`w-full h-full flex flex-col shadow-lg border-2 relative ${
         inputValue.trim() ? "paused" : ""
       }`}
     >
       {/* Header */}
-      <div className="bg-primary text-primary-foreground p-4 rounded-t-lg animate-slide-in-from-top">
-        <div className="flex items-center gap-3">
+      <div className="bg-primary text-primary-foreground p-3 sm:p-4 rounded-t-lg animate-slide-in-from-top">
+        <div className="flex items-center gap-2 sm:gap-3">
           <div
-            className={`w-10 h-10 bg-primary-foreground/20 rounded-full flex items-center justify-center animate-pulse-slow ${
+            className={`w-8 h-8 sm:w-10 sm:h-10 bg-primary-foreground/20 rounded-full flex items-center justify-center animate-pulse-slow ${
               inputValue.trim() ? "paused" : ""
             }`}
           >
             <Bot
-              className={`w-5 h-5 animate-float ${
+              className={`w-4 h-4 sm:w-5 sm:h-5 animate-float ${
                 inputValue.trim() ? "paused" : ""
               }`}
             />
           </div>
           <div>
-            <h1 className="font-semibold text-lg animate-fade-in">Hasubot</h1>
-            <p className="text-primary-foreground/80 text-sm">
-              Some other text here maybe
+            <h1 className="font-semibold text-base sm:text-lg animate-fade-in">
+              Hasubot
+            </h1>
+            <p className="text-primary-foreground/80 text-xs sm:text-sm">
+              Your yoga studio assistant
             </p>
           </div>
         </div>
       </div>
 
       {/* Messages */}
-      <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
+      <CardContent className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4">
         {messages.map((message) => (
           <div
             key={`${message.id}-${message.timestamp.getTime()}`}
-            className={`flex gap-3 ${
+            className={`flex gap-2 sm:gap-3 ${
               message.sender === "user" ? "justify-end" : "justify-start"
             }`}
           >
             {message.sender === "bot" && (
-              <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <Bot className="w-4 h-4 text-primary" />
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <Bot className="w-3 h-3 sm:w-4 sm:h-4 text-primary" />
               </div>
             )}
             <div
-              className={`max-w-[80%] rounded-lg p-3 ${
+              className={`max-w-[85%] sm:max-w-[80%] rounded-lg p-2 sm:p-3 ${
                 message.sender === "user"
                   ? "bg-primary text-primary-foreground ml-auto"
                   : "bg-card text-card-foreground"
               }`}
             >
-              <div className="text-sm leading-relaxed">
+              <div className="text-xs sm:text-sm leading-relaxed">
                 <ReactMarkdown
                   components={{
                     p: ({ children }) => (
@@ -114,27 +116,27 @@ export default function ChatBot() {
               </p>
             </div>
             {message.sender === "user" && (
-              <div className="w-8 h-8 bg-secondary/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <User className="w-4 h-4 text-secondary-foreground" />
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-secondary/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <User className="w-3 h-3 sm:w-4 sm:h-4 text-secondary-foreground" />
               </div>
             )}
           </div>
         ))}
 
         {isTyping && (
-          <div className="flex gap-3 justify-start">
-            <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-              <Bot className="w-4 h-4 text-primary" />
+          <div className="flex gap-2 sm:gap-3 justify-start">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <Bot className="w-3 h-3 sm:w-4 sm:h-4 text-primary" />
             </div>
-            <div className="bg-card text-card-foreground rounded-lg p-3">
+            <div className="bg-card text-card-foreground rounded-lg p-2 sm:p-3">
               <div className="flex gap-1">
-                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-muted-foreground rounded-full animate-bounce"></div>
                 <div
-                  className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+                  className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-muted-foreground rounded-full animate-bounce"
                   style={{ animationDelay: "0.1s" }}
                 ></div>
                 <div
-                  className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
+                  className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-muted-foreground rounded-full animate-bounce"
                   style={{ animationDelay: "0.2s" }}
                 ></div>
               </div>
@@ -145,14 +147,16 @@ export default function ChatBot() {
         {/* Example Questions - Show only when there's just the welcome message */}
         {messages.length === 1 && !isTyping && (
           <div className="flex justify-end">
-            <div className="flex flex-col gap-2 max-w-[80%] items-end">
+            <div className="flex flex-col gap-1.5 sm:gap-2 max-w-[85%] sm:max-w-[80%] items-end">
               {suggestedQuestions.map((question, index) => (
                 <div
                   key={index}
-                  className="rounded-xl py-1 px-4 border-1 border-primary/40 text-primary cursor-pointer hover:text-white hover:bg-primary/90 transition-colors"
+                  className="rounded-xl py-1.5 px-3 sm:py-1 sm:px-4 border-1 border-primary/40 text-primary cursor-pointer hover:text-white hover:bg-primary/90 transition-colors"
                   onClick={() => handleSendMessage(question)}
                 >
-                  <span className="text-sm leading-relaxed">{question}</span>
+                  <span className="text-xs sm:text-sm leading-relaxed">
+                    {question}
+                  </span>
                 </div>
               ))}
             </div>
@@ -163,39 +167,41 @@ export default function ChatBot() {
       </CardContent>
 
       {/* Quick Actions */}
-      <div className="p-4 border-t border-border">
-        <div className="flex flex-wrap gap-2 mb-3">
+      <div className="p-3 sm:p-4 border-t border-border">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3">
           {quickActions.map((action) => {
             const Icon = action.icon;
             return (
               <Badge
                 key={action.label}
                 variant="secondary"
-                className="cursor-pointer hover:bg-secondary/80 transition-colors"
+                className="cursor-pointer hover:bg-secondary/80 transition-colors text-xs px-2 py-1"
                 onClick={() => handleQuickAction(action.label)}
               >
-                <Icon className="w-3 h-3 mr-1" />
-                {action.label}
+                <Icon className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" />
+                <span className="hidden sm:inline">{action.label}</span>
+                <span className="sm:hidden">{action.label.split(" ")[0]}</span>
               </Badge>
             );
           })}
         </div>
 
         {/* Input */}
-        <form onSubmit={handleSubmit} className="flex gap-2">
+        <form onSubmit={handleSubmit} className="flex gap-1.5 sm:gap-2">
           <Input
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Ask about classes, schedules, or anything else..."
-            className="flex-1"
+            placeholder="Ask about classes, schedules..."
+            className="flex-1 text-xs sm:text-sm"
             disabled={isTyping}
           />
           <Button
             type="submit"
             size="icon"
+            className="w-8 h-8 sm:w-10 sm:h-10"
             disabled={!inputValue.trim() || isTyping}
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-3 h-3 sm:w-4 sm:h-4" />
           </Button>
         </form>
       </div>

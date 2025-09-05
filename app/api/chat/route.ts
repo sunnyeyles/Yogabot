@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { KnowledgeManager } from "@/lib/knowledge";
-import { checkRateLimit, rateLimitHeaders } from "@/lib/rateLimit";
+import {
+  checkRateLimit,
+  rateLimitHeaders,
+  checkOpenAIRateLimit,
+  openAIRateLimitHeaders,
+} from "@/lib/rateLimit";
 import { IMPORTANT_INSTRUCTIONS } from "@/lib/constants";
 import { storeChatMessage, getChatHistory } from "@/lib/redis";
 import { sanitizeIP } from "@/lib/utils";
@@ -44,11 +49,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           reply:
-            "Rate limit exceeded. Please try again later. You can send up to 15 messages per hour.",
+            "Rate limit exceeded. Please try again later. You can send up to 150 messages per 5 minutes.",
         },
         {
           status: 429,
           headers: rateLimitHeaders(rl),
+        }
+      );
+    }
+
+    // Check OpenAI API rate limit before making the call
+    const openAIRateLimit = await checkOpenAIRateLimit();
+    if (openAIRateLimit.limited) {
+      return NextResponse.json(
+        {
+          reply:
+            "Service temporarily unavailable due to high demand. Please try again in a few minutes.",
+        },
+        {
+          status: 503,
+          headers: openAIRateLimitHeaders(openAIRateLimit),
         }
       );
     }

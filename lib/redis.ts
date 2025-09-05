@@ -243,3 +243,87 @@ export const getRateLimitInfo = async (
     return { count: 0, resetMs: windowMs };
   }
 };
+
+// OpenAI API rate limiting functions
+export const checkOpenAIRateLimit = async (
+  maxRequests: number = 150,
+  windowMs: number = 300000 // 5 minutes
+): Promise<RateLimitResult> => {
+  try {
+    if (!isConnected) {
+      console.warn("Redis not connected, attempting to reconnect...");
+      await connectRedis();
+    }
+
+    const openAIRateLimitKey = "openai_rate_limit";
+    const now = Date.now();
+    const windowStart = now - windowMs;
+
+    // Use Redis pipeline for atomic operations
+    const pipeline = redis.multi();
+
+    // Remove expired entries (older than window)
+    pipeline.zRemRangeByScore(openAIRateLimitKey, 0, windowStart);
+
+    // Count current requests in window
+    pipeline.zCard(openAIRateLimitKey);
+
+    // Add current request
+    pipeline.zAdd(openAIRateLimitKey, {
+      score: now,
+      value: `${now}-${Math.random()}`,
+    });
+
+    // Set expiration for the key
+    pipeline.expire(openAIRateLimitKey, Math.ceil(windowMs / 1000));
+
+    const results = await pipeline.exec();
+
+    if (!results || results.length < 2) {
+      throw new Error("Redis pipeline execution failed");
+    }
+
+    const currentCount = results[1] as unknown as number;
+    const remaining = Math.max(0, maxRequests - currentCount - 1);
+    const limited = currentCount >= maxRequests;
+
+    return {
+      limited,
+      remaining,
+      resetMs: windowMs,
+    };
+  } catch (error) {
+    console.error("Error checking OpenAI rate limit:", error);
+    // On error, allow the request but log the issue
+    return {
+      limited: false,
+      remaining: maxRequests - 1,
+      resetMs: windowMs,
+    };
+  }
+};
+
+export const getOpenAIRateLimitInfo = async (
+  windowMs: number = 300000
+): Promise<{ count: number; resetMs: number }> => {
+  try {
+    if (!isConnected) {
+      console.warn("Redis not connected, attempting to reconnect...");
+      await connectRedis();
+    }
+
+    const openAIRateLimitKey = "openai_rate_limit";
+    const now = Date.now();
+    const windowStart = now - windowMs;
+
+    // Remove expired entries and count remaining
+    await redis.zRemRangeByScore(openAIRateLimitKey, 0, windowStart);
+    const count = await redis.zCard(openAIRateLimitKey);
+    const resetMs = windowMs;
+
+    return { count, resetMs };
+  } catch (error) {
+    console.error("Error getting OpenAI rate limit info:", error);
+    return { count: 0, resetMs: windowMs };
+  }
+};
