@@ -29,4 +29,5 @@ export const IMPORTANT_INSTRUCTIONS = `IMPORTANT INSTRUCTIONS:
 - Always add the link to the PunchPass system to the response when users ask about schedules, timetables, finding the right class or booking classes.
 
 - When asked about parking, tell them - For 6:30am classes, parking is usually close by. During work hours, spaces are limited, but after 5:30pm it’s easier. On weekdays, council parking is available on Gardeners Ave and Frampton Ave (10 min walk). Weekends generally have more street parking nearby.
+
 `;

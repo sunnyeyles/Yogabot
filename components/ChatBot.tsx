@@ -32,6 +32,11 @@ export default function ChatBot() {
         inputValue.trim() ? "paused" : ""
       }`}
     >
+      {/* Top fade overlay */}
+      <div
+        className="absolute top-26
+       left-0 right-0 h-16 bg-gradient-to-b from-card to-transparent pointer-events-none z-10"
+      />
       {/* Header */}
       <div className="bg-primary text-primary-foreground p-4 rounded-t-lg animate-slide-in-from-top">
         <div className="flex items-center gap-3">
@@ -48,9 +53,9 @@ export default function ChatBot() {
           </div>
           <div>
             <h1 className="font-semibold text-lg animate-fade-in">Hasubot</h1>
-            <p className="text-primary-foreground/80 text-sm">
+            {/* <p className="text-primary-foreground/80 text-sm">
               Some other text here maybe
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

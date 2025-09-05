@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Yogabot - Chat Assistant",
-  description: "AI-powered yoga studio assistant for Marrickville Yoga Centre",
-  robots: "noindex, nofollow", // Prevent search engine indexing of iframe content
+  title: "Yoga Chatbot - Iframe",
+  description: "Embeddable yoga chatbot for Marrickville Yoga Centre",
+  robots: "noindex, nofollow", // Prevent indexing of iframe content
 };
 
 export default function IframeLayout({
@@ -27,7 +27,11 @@ export default function IframeLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ margin: 0, padding: 0, overflow: "hidden" }}
+        style={{
+          margin: 0,
+          padding: 0,
+          overflow: "hidden", // Prevent scrollbars in iframe
+        }}
       >
         {children}
       </body>
