@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -79,7 +79,7 @@ export default function IframeChatBot() {
                   Welcome to Marrickville Yoga Centre!
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  I'm here to help you with information about our classes,
+                  I&apos;m here to help you with information about our classes,
                   pricing, and studio.
                 </p>
               </div>
