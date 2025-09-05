@@ -3,7 +3,7 @@
 
   // Configuration
   const CONFIG = {
-    iframeUrl: "https://yogabot.vercel.app/",
+    iframeUrl: "https://yogabot2.vercel.app/iframe",
     minHeight: 400,
     maxHeight: 800,
     mobileHeight: 500,
@@ -20,13 +20,15 @@
     container.style.cssText = `
       width: 100%;
       max-width: 100%;
-      margin: 0 auto;
+      margin: 0;
+      padding: 0;
       position: relative;
       border-radius: ${CONFIG.borderRadius};
       box-shadow: ${CONFIG.shadow};
       border: ${CONFIG.border};
       overflow: hidden;
       background: #ffffff;
+      display: block;
     `;
 
     return container;
@@ -42,6 +44,9 @@
       border: none;
       display: block;
       background: #ffffff;
+      margin: 0;
+      padding: 0;
+      position: relative;
     `;
     iframe.setAttribute("frameborder", "0");
     iframe.setAttribute("scrolling", "no");

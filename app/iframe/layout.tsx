@@ -24,13 +24,19 @@ export default function IframeLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      style={{ margin: 0, padding: 0, width: "100%", height: "100%" }}
+    >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         style={{
           margin: 0,
           padding: 0,
           overflow: "hidden", // Prevent scrollbars in iframe
+          width: "100%",
+          height: "100vh",
+          position: "relative",
         }}
       >
         {children}

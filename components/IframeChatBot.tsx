@@ -38,8 +38,17 @@ export default function IframeChatBot() {
       className={`h-screen w-full transition-opacity duration-500 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
+      style={{
+        margin: 0,
+        padding: 0,
+        position: "relative",
+        overflow: "hidden",
+      }}
     >
-      <Card className="h-full w-full rounded-none border-0 shadow-none flex flex-col">
+      <Card
+        className="h-full w-full rounded-none border-0 shadow-none flex flex-col"
+        style={{ margin: 0, padding: 0 }}
+      >
         {/* Header */}
         <div className="bg-primary text-primary-foreground p-4 rounded-t-lg animate-slide-in-from-top">
           <div className="flex items-center gap-3">
