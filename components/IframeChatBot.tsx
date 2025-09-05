@@ -57,9 +57,6 @@ export default function IframeChatBot() {
       }`}
     >
       <Card className="h-full w-full rounded-none border-0 shadow-none flex flex-col">
-        {/* Top fade overlay */}
-        <div className="absolute top-14 left-0 right-0 h-16 bg-gradient-to-b from-card to-transparent pointer-events-none z-10" />
-
         {/* Header */}
         <div className="bg-primary text-primary-foreground p-3 rounded-t-lg">
           <h2 className="text-lg font-semibold text-center">
