@@ -3,7 +3,7 @@
 
   // Configuration
   const CONFIG = {
-    iframeUrl: "https://yogabot2.vercel.app/iframe",
+    iframeUrl: "https://yogabot.vercel.app/iframe",
     minHeight: 400,
     maxHeight: 800,
     mobileHeight: 500,
