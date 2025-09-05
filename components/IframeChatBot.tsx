@@ -16,7 +16,7 @@ export default function IframeChatBot() {
   const { messages, isTyping, messagesEndRef, handleSendMessage } = useChat();
   const [inputValue, setInputValue] = useState("");
   const [isVisible, setIsVisible] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleQuickAction = (action: string) => {
     handleSendMessage(action);
@@ -40,14 +40,19 @@ export default function IframeChatBot() {
 
   return (
     <>
-      {/* Toggle Button */}
+      {/* Toggle Button with Text */}
       {!isOpen && (
-        <button
-          onClick={toggleChatbot}
-          className="fixed bottom-5 left-1/2 transform -translate-x-1/2 sm:left-auto sm:right-0 sm:transform-none w-15 h-15 rounded-full bg-indigo-600 text-white border-none cursor-pointer z-[10000] shadow-lg flex items-center justify-center transition-all duration-300 hover:bg-indigo-700"
-        >
-          <Bot className="w-6 h-6 animate-float" />
-        </button>
+        <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 sm:left-auto sm:right-0 sm:transform-none z-[10000] flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <span className="text-sm font-medium text-gray-700 bg-white px-3 py-2 rounded-lg shadow-md border border-gray-200 order-2 sm:order-1">
+            Got questions? Ask me!
+          </span>
+          <button
+            onClick={toggleChatbot}
+            className="w-15 h-15 rounded-full bg-indigo-600 text-white border-none cursor-pointer shadow-lg flex items-center justify-center transition-all duration-300 hover:bg-indigo-700 order-1 sm:order-2"
+          >
+            <Bot className="w-6 h-6 animate-float" />
+          </button>
+        </div>
       )}
 
       {/* Chatbot Container */}
@@ -60,7 +65,7 @@ export default function IframeChatBot() {
           // Mobile responsive positioning and sizing
           "w-[95vw] h-[80vh] max-w-[95vw] max-h-[80vh] " +
           "left-1/2 transform -translate-x-1/2 bottom-5 " +
-          "sm:w-[450px] sm:h-[550px] sm:max-w-[500px] sm:max-h-[650px] " +
+          "sm:w-[550px] sm:h-[650px] sm:max-w-[600px] sm:max-h-[750px] " +
           "sm:left-auto sm:right-0 sm:transform-none sm:-translate-x-0"
         }`}
       >
@@ -127,10 +132,10 @@ export default function IframeChatBot() {
                     </div>
                   )}
                   <div
-                    className={`max-w-[80%] rounded-lg p-3 ${
+                    className={`max-w-[80%] rounded-lg ${
                       message.sender === "user"
-                        ? "bg-primary text-primary-foreground ml-auto"
-                        : "bg-card text-card-foreground"
+                        ? "bg-primary text-primary-foreground ml-auto p-2"
+                        : "bg-card text-card-foreground p-3"
                     }`}
                   >
                     <div className="text-sm leading-relaxed">
