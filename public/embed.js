@@ -3,7 +3,7 @@
 
   // Configuration
   const CONFIG = {
-    iframeUrl: "https://your-domain.com/iframe", // Replace with your actual domain
+    iframeUrl: "https://yogabot.vercel.app/",
     minHeight: 400,
     maxHeight: 800,
     mobileHeight: 500,
@@ -46,6 +46,7 @@
     iframe.setAttribute("frameborder", "0");
     iframe.setAttribute("scrolling", "no");
     iframe.setAttribute("allowtransparency", "true");
+    iframe.setAttribute("loading", "lazy");
 
     return iframe;
   }
@@ -98,7 +99,8 @@
 
     // Listen for messages from iframe (for height adjustments)
     window.addEventListener("message", function (event) {
-      if (event.origin !== window.location.origin) return;
+      // Check if the message is from our iframe
+      if (event.origin !== new URL(CONFIG.iframeUrl).origin) return;
 
       if (event.data.type === "resize") {
         const newHeight = Math.min(
@@ -107,6 +109,15 @@
         );
         container.style.height = `${newHeight}px`;
       }
+    });
+
+    // Handle iframe load
+    iframe.addEventListener("load", function () {
+      // Send initial height request to iframe
+      iframe.contentWindow.postMessage(
+        { type: "getHeight" },
+        new URL(CONFIG.iframeUrl).origin
+      );
     });
   }
 
@@ -119,4 +130,7 @@
 
   // Expose global function for manual initialization
   window.initYogaChatbot = initChatbot;
+
+  // Expose configuration for customization
+  window.YogaChatbotConfig = CONFIG;
 })();
