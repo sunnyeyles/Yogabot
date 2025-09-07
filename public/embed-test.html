@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yoga Chatbot Embed Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+      <h1 class="text-3xl font-bold text-gray-800 mb-6">
+        Yoga Chatbot Embed Test
+      </h1>
+
+      <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4">Test Page Content</h2>
+        <p class="text-gray-600 mb-4">
+          This page demonstrates the yoga chatbot embed functionality. The
+          chatbot should appear as a floating button in the bottom-right corner.
+        </p>
+        <p class="text-gray-600 mb-4">
+          Click the button to open the chatbot, and use the close button (X) to
+          close it.
+        </p>
+        <p class="text-gray-600">
+          The open/close functionality is now handled entirely by the embed
+          script.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">Embed Code</h2>
+        <pre
+          class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"
+        ><code>&lt;!-- Add this div where you want the chatbot to appear --&gt;
+ &lt;div id="yoga-chatbot-embed"&gt;&lt;/div&gt;
+
+ &lt;!-- Add this script tag before the closing &lt;/body&gt; tag --&gt;
+ &lt;script src="https://yogabot.vercel.app/embed.js"&gt;&lt;/script&gt;</code></pre>
+      </div>
+
+      <!-- Additional content to test overlay functionality -->
+      <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+        <h2 class="text-xl font-semibold mb-4">Overlay Test</h2>
+        <p class="text-gray-600 mb-4">
+          This content should appear behind the chatbot when it's open. The
+          chatbot should overlay on top of all website content.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-100 p-4 rounded">
+            <h3 class="font-semibold text-blue-800">Content Block 1</h3>
+            <p class="text-blue-600">
+              This should be behind the chatbot overlay.
+            </p>
+          </div>
+          <div class="bg-green-100 p-4 rounded">
+            <h3 class="font-semibold text-green-800">Content Block 2</h3>
+            <p class="text-green-600">
+              This should also be behind the chatbot overlay.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Embed the chatbot -->
+    <div id="yoga-chatbot-embed"></div>
+    <script src="embed.js"></script>
+  </body>
+</html>

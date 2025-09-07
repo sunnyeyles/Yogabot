@@ -70,3 +70,26 @@ export const ensureValidTimestamp = (
   // Fallback to current time
   return new Date();
 };
+
+// Hash IP address for privacy in analytics
+export const hashIP = async (ip: string): Promise<string> => {
+  try {
+    // Use Web Crypto API to create a hash
+    const encoder = new TextEncoder();
+    const data = encoder.encode(
+      ip + process.env.ANALYTICS_SALT || "default-salt"
+    );
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    return hashHex.substring(0, 16); // Return first 16 characters for shorter hash
+  } catch (error) {
+    console.error("Error hashing IP:", error);
+    // Fallback to a simple hash
+    return btoa(ip)
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .substring(0, 16);
+  }
+};

@@ -152,6 +152,74 @@ export const clearChatHistory = async (ipAddress: string) => {
   }
 };
 
+// Analytics data collection functions
+export interface ChatAnalytics {
+  id: string;
+  timestamp: string;
+  messageCount: number;
+  sessionDuration?: number;
+  userQuestions: string[];
+  botResponses: string[];
+  quickActionsUsed: string[];
+  isEphemeral: boolean;
+  ipHash: string; // Hashed IP for privacy
+}
+
+export const storeChatAnalytics = async (analytics: ChatAnalytics) => {
+  try {
+    if (!isConnected) {
+      console.warn("Redis not connected, attempting to reconnect...");
+      await connectRedis();
+    }
+
+    const analyticsKey = `analytics:${analytics.id}`;
+    await redis.set(analyticsKey, JSON.stringify(analytics));
+
+    // Set expiration for analytics data (e.g., 1 year)
+    await redis.expire(analyticsKey, 365 * 24 * 60 * 60);
+
+    return true;
+  } catch (error) {
+    console.error("Error storing chat analytics:", error);
+    return false;
+  }
+};
+
+export const getChatAnalytics = async (limit: number = 100) => {
+  try {
+    if (!isConnected) {
+      console.warn("Redis not connected, attempting to reconnect...");
+      await connectRedis();
+    }
+
+    const pattern = "analytics:*";
+    const keys = await redis.keys(pattern);
+
+    if (keys.length === 0) {
+      return [];
+    }
+
+    // Get the most recent analytics
+    const recentKeys = keys.slice(-limit);
+    const analytics = await redis.mGet(recentKeys);
+
+    return analytics
+      .filter((data) => data !== null)
+      .map((data) => {
+        try {
+          return JSON.parse(data as string);
+        } catch (error) {
+          console.error("Error parsing analytics data:", error);
+          return null;
+        }
+      })
+      .filter((data) => data !== null);
+  } catch (error) {
+    console.error("Error retrieving chat analytics:", error);
+    return [];
+  }
+};
+
 // Rate limiting functions
 export interface RateLimitResult {
   limited: boolean;
