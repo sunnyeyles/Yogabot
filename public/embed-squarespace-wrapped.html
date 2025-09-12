@@ -1,0 +1,337 @@
+<script>
+  (function () {
+    "use strict";
+
+    console.log("Yoga Chatbot: Script loaded");
+
+    // Configuration
+    const CONFIG = {
+      iframeUrl: "https://yogabot.vercel.app/iframe",
+    };
+
+    let isOpen = false;
+    let toggleButton = null;
+    let chatbotContainer = null;
+
+    // Add CSS styles
+    function addStyles() {
+      console.log("Yoga Chatbot: Adding styles");
+      const style = document.createElement("style");
+      style.id = "yoga-chatbot-styles";
+      style.textContent = `
+      #yoga-chatbot-toggle {
+        position: fixed !important;
+        bottom: 20px !important;
+        right: 16px !important;
+        width: 60px !important;
+        height: 60px !important;
+        border-radius: 50% !important;
+        background-color: #4f46e5 !important;
+        color: white !important;
+        border: none !important;
+        cursor: pointer !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.3s ease !important;
+        z-index: 999999 !important;
+        font-family: Arial, sans-serif !important;
+      }
+      
+      #yoga-chatbot-toggle:hover {
+        background-color: #4338ca !important;
+        transform: scale(1.05) !important;
+      }
+      
+      #yoga-chatbot-label {
+        position: fixed !important;
+        bottom: 90px !important;
+        right: 16px !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: #374151 !important;
+        background-color: white !important;
+        padding: 8px 12px !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+        border: 1px solid #e5e7eb !important;
+        z-index: 999999 !important;
+        white-space: nowrap !important;
+        font-family: Arial, sans-serif !important;
+      }
+      
+      #yoga-chatbot-container {
+        position: fixed !important;
+        z-index: 999998 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25) !important;
+        border: 1px solid #e5e7eb !important;
+        background-color: white !important;
+        transition: all 0.3s ease !important;
+        width: 95vw !important;
+        height: 80vh !important;
+        max-width: 95vw !important;
+        max-height: 80vh !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        bottom: 20px !important;
+      }
+      
+      #yoga-chatbot-close {
+        position: absolute !important;
+        top: 8px !important;
+        right: 8px !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        background-color: rgba(0, 0, 0, 0.1) !important;
+        color: black !important;
+        border: none !important;
+        cursor: pointer !important;
+        z-index: 999999 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.2s ease !important;
+        font-family: Arial, sans-serif !important;
+      }
+      
+      #yoga-chatbot-close:hover {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+      }
+      
+      #yoga-chatbot-iframe {
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+        background-color: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 12px !important;
+      }
+      
+      @media (min-width: 640px) {
+        #yoga-chatbot-container {
+          width: 550px !important;
+          height: 650px !important;
+          max-width: 600px !important;
+          max-height: 750px !important;
+          left: auto !important;
+          right: 16px !important;
+          transform: none !important;
+        }
+        
+        #yoga-chatbot-toggle {
+          right: 64px !important;
+        }
+        
+        #yoga-chatbot-label {
+          right: 64px !important;
+        }
+      }
+      
+      .yoga-chatbot-hidden {
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+      
+      .yoga-chatbot-slide-up {
+        opacity: 0 !important;
+        transform: translateY(100%) !important;
+        pointer-events: none !important;
+      }
+      
+      .yoga-chatbot-slide-down {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        pointer-events: auto !important;
+      }
+    `;
+      document.head.appendChild(style);
+      console.log("Yoga Chatbot: Styles added");
+    }
+
+    // Create toggle button
+    function createToggleButton() {
+      console.log("Yoga Chatbot: Creating toggle button");
+      const button = document.createElement("button");
+      button.id = "yoga-chatbot-toggle";
+      button.innerHTML = `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V9M19 9H14V4H5V21H19V9Z" fill="currentColor"/>
+      </svg>
+    `;
+
+      if (isOpen) {
+        button.classList.add("yoga-chatbot-hidden");
+      }
+
+      button.addEventListener("click", toggleChatbot);
+      console.log("Yoga Chatbot: Toggle button created");
+      return button;
+    }
+
+    // Create text label
+    function createTextLabel() {
+      console.log("Yoga Chatbot: Creating text label");
+      const label = document.createElement("span");
+      label.id = "yoga-chatbot-label";
+      label.textContent = "Got questions? Ask me!";
+
+      if (isOpen) {
+        label.classList.add("yoga-chatbot-hidden");
+      }
+
+      console.log("Yoga Chatbot: Text label created");
+      return label;
+    }
+
+    // Create iframe
+    function createIframe() {
+      console.log("Yoga Chatbot: Creating iframe");
+      const iframe = document.createElement("iframe");
+      iframe.id = "yoga-chatbot-iframe";
+      iframe.src = CONFIG.iframeUrl;
+      iframe.setAttribute("frameborder", "0");
+      iframe.setAttribute("scrolling", "no");
+      iframe.setAttribute("allowtransparency", "true");
+      console.log("Yoga Chatbot: Iframe created");
+      return iframe;
+    }
+
+    // Create chatbot container
+    function createChatbotContainer() {
+      console.log("Yoga Chatbot: Creating chatbot container");
+      const container = document.createElement("div");
+      container.id = "yoga-chatbot-container";
+
+      if (!isOpen) {
+        container.classList.add("yoga-chatbot-slide-up");
+      } else {
+        container.classList.add("yoga-chatbot-slide-down");
+      }
+
+      // Add close button
+      const closeButton = document.createElement("button");
+      closeButton.id = "yoga-chatbot-close";
+      closeButton.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="currentColor"/>
+      </svg>
+    `;
+      closeButton.addEventListener("click", toggleChatbot);
+
+      container.appendChild(closeButton);
+      container.appendChild(createIframe());
+
+      console.log("Yoga Chatbot: Chatbot container created");
+      return container;
+    }
+
+    // Toggle chatbot visibility
+    function toggleChatbot() {
+      console.log("Yoga Chatbot: Toggling chatbot, current state:", isOpen);
+      isOpen = !isOpen;
+
+      if (chatbotContainer) {
+        if (isOpen) {
+          chatbotContainer.classList.remove("yoga-chatbot-slide-up");
+          chatbotContainer.classList.add("yoga-chatbot-slide-down");
+        } else {
+          chatbotContainer.classList.remove("yoga-chatbot-slide-down");
+          chatbotContainer.classList.add("yoga-chatbot-slide-up");
+        }
+      }
+
+      if (toggleButton) {
+        if (isOpen) {
+          toggleButton.classList.add("yoga-chatbot-hidden");
+        } else {
+          toggleButton.classList.remove("yoga-chatbot-hidden");
+        }
+      }
+
+      const label = document.getElementById("yoga-chatbot-label");
+      if (label) {
+        if (isOpen) {
+          label.classList.add("yoga-chatbot-hidden");
+        } else {
+          label.classList.remove("yoga-chatbot-hidden");
+        }
+      }
+      console.log("Yoga Chatbot: Toggle complete, new state:", isOpen);
+    }
+
+    // Initialize the chatbot
+    function initChatbot() {
+      console.log("Yoga Chatbot: Initializing...");
+
+      // Check if container already exists
+      if (document.getElementById("yoga-chatbot-container")) {
+        console.log("Yoga Chatbot: Already initialized, skipping");
+        return;
+      }
+
+      try {
+        // Add styles first
+        addStyles();
+
+        // Create and append elements
+        toggleButton = createToggleButton();
+        const textLabel = createTextLabel();
+        chatbotContainer = createChatbotContainer();
+
+        // Insert into the page
+        const targetElement =
+          document.getElementById("yoga-chatbot-embed") || document.body;
+        targetElement.appendChild(toggleButton);
+        targetElement.appendChild(textLabel);
+        targetElement.appendChild(chatbotContainer);
+
+        console.log("Yoga Chatbot: Successfully initialized and added to page");
+        console.log("Yoga Chatbot: Toggle button:", toggleButton);
+        console.log("Yoga Chatbot: Container:", chatbotContainer);
+      } catch (error) {
+        console.error("Yoga Chatbot: Error during initialization:", error);
+      }
+    }
+
+    // Wait for DOM to be ready
+    function waitForDOM() {
+      console.log("Yoga Chatbot: Waiting for DOM...");
+      if (document.readyState === "loading") {
+        console.log("Yoga Chatbot: DOM still loading, adding event listener");
+        document.addEventListener("DOMContentLoaded", function () {
+          console.log("Yoga Chatbot: DOM loaded, initializing");
+          initChatbot();
+        });
+      } else {
+        console.log(
+          "Yoga Chatbot: DOM already ready, initializing immediately"
+        );
+        initChatbot();
+      }
+    }
+
+    // Start with a small delay to ensure Squarespace is ready
+    setTimeout(function () {
+      console.log("Yoga Chatbot: Starting initialization after delay");
+      waitForDOM();
+    }, 1000);
+
+    // Also try to initialize after a longer delay as backup
+    setTimeout(function () {
+      console.log("Yoga Chatbot: Backup initialization attempt");
+      if (!document.getElementById("yoga-chatbot-container")) {
+        initChatbot();
+      }
+    }, 3000);
+
+    // Expose global functions
+    window.initYogaChatbot = initChatbot;
+    window.toggleYogaChatbot = toggleChatbot;
+
+    console.log("Yoga Chatbot: Global functions exposed");
+  })();
+</script>

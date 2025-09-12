@@ -116,10 +116,19 @@ Please provide helpful, accurate responses based on this information. Keep your 
           timestamp: new Date().toISOString(),
           messageCount: analyticsData.messageCount || 1,
           sessionDuration: analyticsData.sessionDuration,
-          userQuestions: analyticsData.userQuestions || [message],
-          botResponses: analyticsData.botResponses || [reply],
           quickActionsUsed: analyticsData.quickActionsUsed || [],
-          isEphemeral: true,
+          conversation: analyticsData.conversation || [
+            {
+              role: "user",
+              content: message,
+              timestamp: new Date().toISOString(),
+            },
+            {
+              role: "bot",
+              content: reply,
+              timestamp: new Date().toISOString(),
+            },
+          ],
           ipHash: hashedIP,
         };
         await storeChatAnalytics(analytics);

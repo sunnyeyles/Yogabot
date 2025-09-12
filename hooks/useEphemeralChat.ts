@@ -82,16 +82,19 @@ export const useEphemeralChat = () => {
       const currentMessages = [...messages, userMessage];
       const sessionDuration = Date.now() - sessionStartTime;
 
-      // Prepare analytics data
+      // Prepare analytics data - exclude the initial bot message
+      const conversationMessages = currentMessages.filter(
+        (msg) => !(msg.sender === "bot" && msg.id === "1")
+      );
+
       const analyticsData = {
-        messageCount: currentMessages.length,
+        messageCount: conversationMessages.length,
         sessionDuration,
-        userQuestions: currentMessages
-          .filter((msg) => msg.sender === "user")
-          .map((msg) => msg.content),
-        botResponses: currentMessages
-          .filter((msg) => msg.sender === "bot")
-          .map((msg) => msg.content),
+        conversation: conversationMessages.map((msg) => ({
+          role: msg.sender === "user" ? "user" : "bot",
+          content: msg.content,
+          timestamp: msg.timestamp.toISOString(),
+        })),
         quickActionsUsed,
       };
 

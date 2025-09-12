@@ -3,12 +3,15 @@ import { getChatAnalytics } from "@/lib/redis";
 
 // Define types for analytics data
 interface ChatAnalyticsItem {
-  sessionId: string;
-  isEphemeral: boolean;
+  id: string;
   messageCount: number;
-  sessionDuration: number;
+  sessionDuration?: number;
   quickActionsUsed?: string[];
-  userQuestions?: string[];
+  conversation?: Array<{
+    role: "user" | "bot";
+    content: string;
+    timestamp: string;
+  }>;
   timestamp: string;
 }
 
@@ -17,32 +20,14 @@ export async function GET(request: NextRequest) {
     // Get query parameters
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get("limit") || "100");
-    const type = searchParams.get("type"); // "ephemeral", "persistent", or "all"
 
     // Get analytics data
     const analytics = await getChatAnalytics(limit);
-
-    // Filter by type if specified
-    let filteredAnalytics = analytics;
-    if (type === "ephemeral") {
-      filteredAnalytics = analytics.filter(
-        (item: ChatAnalyticsItem) => item.isEphemeral === true
-      );
-    } else if (type === "persistent") {
-      filteredAnalytics = analytics.filter(
-        (item: ChatAnalyticsItem) => item.isEphemeral === false
-      );
-    }
+    const filteredAnalytics = analytics;
 
     // Calculate summary statistics
     const summary = {
       totalSessions: filteredAnalytics.length,
-      ephemeralSessions: analytics.filter(
-        (item: ChatAnalyticsItem) => item.isEphemeral === true
-      ).length,
-      persistentSessions: analytics.filter(
-        (item: ChatAnalyticsItem) => item.isEphemeral === false
-      ).length,
       averageMessageCount:
         filteredAnalytics.reduce(
           (sum: number, item: ChatAnalyticsItem) =>
@@ -101,13 +86,15 @@ function getCommonQuestions(analytics: ChatAnalyticsItem[]): {
   const questionCounts: { [key: string]: number } = {};
 
   analytics.forEach((item: ChatAnalyticsItem) => {
-    if (item.userQuestions && Array.isArray(item.userQuestions)) {
-      item.userQuestions.forEach((question: string) => {
-        // Normalize question (lowercase, trim)
-        const normalized = question.toLowerCase().trim();
-        if (normalized.length > 3) {
-          // Only count meaningful questions
-          questionCounts[normalized] = (questionCounts[normalized] || 0) + 1;
+    if (item.conversation && Array.isArray(item.conversation)) {
+      item.conversation.forEach((message) => {
+        if (message.role === "user") {
+          // Normalize question (lowercase, trim)
+          const normalized = message.content.toLowerCase().trim();
+          if (normalized.length > 3) {
+            // Only count meaningful questions
+            questionCounts[normalized] = (questionCounts[normalized] || 0) + 1;
+          }
         }
       });
     }

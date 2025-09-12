@@ -158,10 +158,12 @@ export interface ChatAnalytics {
   timestamp: string;
   messageCount: number;
   sessionDuration?: number;
-  userQuestions: string[];
-  botResponses: string[];
   quickActionsUsed: string[];
-  isEphemeral: boolean;
+  conversation: Array<{
+    role: "user" | "bot";
+    content: string;
+    timestamp: string;
+  }>;
   ipHash: string; // Hashed IP for privacy
 }
 

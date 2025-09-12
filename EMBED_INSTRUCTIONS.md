@@ -14,6 +14,24 @@ Add this code to your website where you want the chatbot to appear:
 <script src="https://yogabot2.vercel.app/embed.js"></script>
 ```
 
+### 1.1. Versioned Embed Code (Recommended for Production)
+
+For production websites, we recommend using the versioned embed script for better stability:
+
+```html
+<!-- Add this div where you want the chatbot -->
+<div id="yoga-chatbot-embed"></div>
+
+<!-- Use versioned script for stability -->
+<script src="https://yogabot2.vercel.app/embed-v1.js"></script>
+```
+
+**Benefits of versioned scripts:**
+
+- Guaranteed backward compatibility
+- Won't break when we update the main embed script
+- More stable for production websites
+
 ### 2. Custom Container
 
 If you want to place the chatbot in a specific container:
@@ -103,6 +121,7 @@ If you need to initialize the chatbot manually:
 1. Check that the script URL is correct
 2. Ensure the div with id "yoga-chatbot-embed" exists
 3. Check browser console for errors
+4. Verify the chatbot service is running: https://yogabot2.vercel.app/api/health
 
 ### Styling Issues
 
@@ -115,6 +134,19 @@ If you need to initialize the chatbot manually:
 1. Ensure viewport meta tag is present
 2. Check if your site has responsive design
 3. Test on actual mobile devices
+
+### Service Issues
+
+If the chatbot stops working:
+
+1. **Check Service Status**: Visit https://yogabot2.vercel.app/api/health
+2. **Try Versioned Script**: Switch to `embed-v1.js` for stability
+3. **Clear Browser Cache**: Hard refresh the page (Ctrl+F5 or Cmd+Shift+R)
+4. **Check Console Errors**: Open browser developer tools and look for JavaScript errors
+
+### Emergency Fallback
+
+If the chatbot is completely down, you can temporarily remove the embed script without breaking your website. The chatbot will simply not appear until the service is restored.
 
 ## Support
 

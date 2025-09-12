@@ -8,8 +8,13 @@ import {
   openAIRateLimitHeaders,
 } from "@/lib/rateLimit";
 import { IMPORTANT_INSTRUCTIONS } from "@/lib/constants";
-import { storeChatMessage, getChatHistory } from "@/lib/redis";
-import { sanitizeIP } from "@/lib/utils";
+import {
+  storeChatMessage,
+  getChatHistory,
+  storeChatAnalytics,
+  ChatAnalytics,
+} from "@/lib/redis";
+import { sanitizeIP, hashIP } from "@/lib/utils";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -117,6 +122,36 @@ Please provide helpful, accurate responses based on this information. Keep your 
       timestamp: new Date(),
     };
     await storeChatMessage(clientIP, botMessage);
+
+    // Store analytics data for regular chat
+    try {
+      const hashedIP = await hashIP(clientIP);
+      const conversation = [
+        {
+          role: "user" as const,
+          content: message.trim(),
+          timestamp: userMessage.timestamp.toISOString(),
+        },
+        {
+          role: "bot" as const,
+          content: reply,
+          timestamp: botMessage.timestamp.toISOString(),
+        },
+      ];
+
+      const analytics: ChatAnalytics = {
+        id: `${sessionId}_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        messageCount: 2, // user + bot message
+        quickActionsUsed: [],
+        conversation,
+        ipHash: hashedIP,
+      };
+      await storeChatAnalytics(analytics);
+    } catch (error) {
+      console.error("Error storing regular chat analytics:", error);
+      // Don't fail the request if analytics storage fails
+    }
 
     return NextResponse.json({ reply });
   } catch (error) {
