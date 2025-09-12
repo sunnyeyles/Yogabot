@@ -174,8 +174,47 @@ export const storeChatAnalytics = async (analytics: ChatAnalytics) => {
       await connectRedis();
     }
 
-    const analyticsKey = `analytics:${analytics.id}`;
-    await redis.set(analyticsKey, JSON.stringify(analytics));
+    // Use IP-based key to ensure only one entry per IP
+    const analyticsKey = `analytics:${analytics.ipHash}`;
+
+    // Get existing analytics for this IP
+    const existingData = await redis.get(analyticsKey);
+    let existingAnalytics: ChatAnalytics | null = null;
+
+    if (existingData) {
+      try {
+        existingAnalytics = JSON.parse(existingData);
+      } catch (error) {
+        console.error("Error parsing existing analytics:", error);
+      }
+    }
+
+    // If we have existing data, merge the conversations
+    if (existingAnalytics) {
+      const mergedAnalytics: ChatAnalytics = {
+        ...analytics,
+        id: existingAnalytics.id, // Keep the original ID
+        timestamp: existingAnalytics.timestamp, // Keep the original timestamp
+        messageCount: existingAnalytics.messageCount + analytics.messageCount,
+        sessionDuration: Math.max(
+          existingAnalytics.sessionDuration || 0,
+          analytics.sessionDuration || 0
+        ),
+        quickActionsUsed: [
+          ...(existingAnalytics.quickActionsUsed || []),
+          ...(analytics.quickActionsUsed || []),
+        ],
+        conversation: [
+          ...(existingAnalytics.conversation || []),
+          ...(analytics.conversation || []),
+        ],
+      };
+
+      await redis.set(analyticsKey, JSON.stringify(mergedAnalytics));
+    } else {
+      // First time for this IP, store as is
+      await redis.set(analyticsKey, JSON.stringify(analytics));
+    }
 
     // Set expiration for analytics data (e.g., 1 year)
     await redis.expire(analyticsKey, 365 * 24 * 60 * 60);
@@ -201,9 +240,8 @@ export const getChatAnalytics = async (limit: number = 100) => {
       return [];
     }
 
-    // Get the most recent analytics
-    const recentKeys = keys.slice(-limit);
-    const analytics = await redis.mGet(recentKeys);
+    // Get all analytics (since we now have one per IP)
+    const analytics = await redis.mGet(keys);
 
     return analytics
       .filter((data) => data !== null)
@@ -215,7 +253,8 @@ export const getChatAnalytics = async (limit: number = 100) => {
           return null;
         }
       })
-      .filter((data) => data !== null);
+      .filter((data) => data !== null)
+      .slice(0, limit); // Apply limit after filtering
   } catch (error) {
     console.error("Error retrieving chat analytics:", error);
     return [];
