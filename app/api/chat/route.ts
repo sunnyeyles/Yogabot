@@ -1,20 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { KnowledgeManager } from "@/lib/knowledge";
-import {
-  checkRateLimit,
-  rateLimitHeaders,
-  checkOpenAIRateLimit,
-  openAIRateLimitHeaders,
-} from "@/lib/rateLimit";
+import { checkRateLimit, checkOpenAIRateLimit } from "@/lib/rateLimit";
 import { IMPORTANT_INSTRUCTIONS } from "@/lib/constants";
-import {
-  storeChatMessage,
-  getChatHistory,
-  storeChatAnalytics,
-  ChatAnalytics,
-} from "@/lib/redis";
-import { sanitizeIP, hashIP } from "@/lib/utils";
+import { sanitizeIP } from "@/lib/utils";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -46,7 +35,6 @@ const getClientIP = (request: NextRequest): string => {
 export async function POST(request: NextRequest) {
   try {
     const { message, conversationHistory, sessionId } = await request.json();
-    const clientIP = getClientIP(request);
 
     // Enforce rate limit per session (fallback to IP)
     const rl = await checkRateLimit(request, sessionId);
@@ -58,7 +46,6 @@ export async function POST(request: NextRequest) {
         },
         {
           status: 429,
-          headers: rateLimitHeaders(rl),
         }
       );
     }
@@ -73,19 +60,9 @@ export async function POST(request: NextRequest) {
         },
         {
           status: 503,
-          headers: openAIRateLimitHeaders(openAIRateLimit),
         }
       );
     }
-
-    // Store user message in Redis
-    const userMessage = {
-      id: Date.now().toString(),
-      content: message.trim(),
-      sender: "user" as const,
-      timestamp: new Date(),
-    };
-    await storeChatMessage(clientIP, userMessage);
 
     // Get all available knowledge to let the AI handle the logic
     const knowledgeContent = knowledgeManager.getAllContent();
@@ -114,45 +91,6 @@ Please provide helpful, accurate responses based on this information. Keep your 
       .replace(/\s+$/gm, "")
       .trim();
 
-    // Store bot response in Redis
-    const botMessage = {
-      id: (Date.now() + 1).toString(),
-      content: reply,
-      sender: "bot" as const,
-      timestamp: new Date(),
-    };
-    await storeChatMessage(clientIP, botMessage);
-
-    // Store analytics data for regular chat
-    try {
-      const hashedIP = await hashIP(clientIP);
-      const conversation = [
-        {
-          role: "user" as const,
-          content: message.trim(),
-          timestamp: userMessage.timestamp.toISOString(),
-        },
-        {
-          role: "bot" as const,
-          content: reply,
-          timestamp: botMessage.timestamp.toISOString(),
-        },
-      ];
-
-      const analytics: ChatAnalytics = {
-        id: `${sessionId}_${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        messageCount: 2, // user + bot message
-        quickActionsUsed: [],
-        conversation,
-        ipHash: hashedIP,
-      };
-      await storeChatAnalytics(analytics);
-    } catch (error) {
-      console.error("Error storing regular chat analytics:", error);
-      // Don't fail the request if analytics storage fails
-    }
-
     return NextResponse.json({ reply });
   } catch (error) {
     console.error(error);
@@ -167,11 +105,10 @@ Please provide helpful, accurate responses based on this information. Keep your 
 export async function GET(request: NextRequest) {
   try {
     const clientIP = getClientIP(request);
-    const chatHistory = await getChatHistory(clientIP);
-
     return NextResponse.json({
-      messages: chatHistory,
+      messages: [],
       ip: clientIP,
+      message: "Chat history storage disabled.",
     });
   } catch (error) {
     console.error("Error retrieving chat history:", error);

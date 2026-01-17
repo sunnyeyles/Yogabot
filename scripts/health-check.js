@@ -24,7 +24,6 @@ async function checkHealth(url, environment) {
       console.log("✅ Health check passed");
       console.log(`   Version: ${healthData.version}`);
       console.log(`   Uptime: ${Math.round(healthData.uptime)}s`);
-      console.log(`   Redis: ${healthData.services.redis.status}`);
       console.log(`   Iframe: ${healthData.services.iframe.status}`);
     } else {
       console.log("❌ Health check failed");

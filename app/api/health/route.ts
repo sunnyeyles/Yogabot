@@ -1,11 +1,7 @@
 import { NextResponse } from "next/server";
-import { redis } from "@/lib/redis";
 
 export async function GET() {
   try {
-    // Check Redis connection
-    const redisStatus = await checkRedisConnection();
-
     // Check if iframe endpoint is accessible
     const iframeStatus = await checkIframeEndpoint();
 
@@ -14,15 +10,13 @@ export async function GET() {
       timestamp: new Date().toISOString(),
       version: "1.0.0",
       services: {
-        redis: redisStatus,
         iframe: iframeStatus,
       },
       uptime: process.uptime(),
     };
 
     // Determine overall health
-    const isHealthy =
-      redisStatus.status === "healthy" && iframeStatus.status === "healthy";
+    const isHealthy = iframeStatus.status === "healthy";
 
     return NextResponse.json(health, {
       status: isHealthy ? 200 : 503,
@@ -41,16 +35,6 @@ export async function GET() {
       },
       { status: 503 }
     );
-  }
-}
-
-async function checkRedisConnection() {
-  try {
-    await redis.ping();
-    return { status: "healthy", message: "Redis connection successful" };
-  } catch (error) {
-    console.error("Redis health check failed:", error);
-    return { status: "unhealthy", message: "Redis connection failed" };
   }
 }
 

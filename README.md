@@ -1,12 +1,11 @@
 # Yoga Chatbot
 
-A modern, interactive chatbot for Marrickville Yoga Centre built with Next.js, React, and OpenAI. The chatbot provides information about yoga classes, schedules, pricing, and studio details while maintaining conversation history in Redis.
+A modern, interactive chatbot for Marrickville Yoga Centre built with Next.js, React, and OpenAI. The chatbot provides information about yoga classes, schedules, pricing, and studio details.
 
 ## Features
 
 - **Intelligent Chat Interface**: Powered by OpenAI GPT-4o-mini for natural conversations
-- **Persistent Chat History**: Conversations stored in Redis by IP address
-- **Rate Limiting**: Built-in protection against spam and abuse
+- **Stateless by Default**: No server-side persistence required
 - **Responsive Design**: Modern UI with smooth animations and transitions
 - **Knowledge Base Integration**: Comprehensive information about classes, pricing, and studio details
 - **Real-time Messaging**: Instant responses with smooth UI interactions
@@ -17,7 +16,6 @@ A modern, interactive chatbot for Marrickville Yoga Centre built with Next.js, R
 - **Frontend**: Next.js 15, React 19, TypeScript
 - **Styling**: Tailwind CSS with custom animations
 - **AI**: OpenAI GPT-4o-mini
-- **Database**: Redis for chat history storage
 - **UI Components**: Radix UI components with custom styling
 - **Markdown**: React Markdown for rich text rendering
 
@@ -26,7 +24,6 @@ A modern, interactive chatbot for Marrickville Yoga Centre built with Next.js, R
 ### Prerequisites
 
 - Node.js 18+
-- Redis server
 - OpenAI API key
 
 ### Installation
@@ -51,9 +48,6 @@ pnpm install
 # OpenAI API Key
 OPENAI_API_KEY=your_openai_api_key_here
 
-# Redis Configuration
-REDIS_URL=redis://localhost:6379
-
 # Rate Limiting (optional)
 RATE_LIMIT_MAX_REQUESTS=150
 RATE_LIMIT_WINDOW_MS=300000
@@ -63,18 +57,7 @@ OPENAI_RATE_LIMIT_MAX_REQUESTS=150
 OPENAI_RATE_LIMIT_WINDOW_MS=300000
 ```
 
-4. Start Redis server:
-
-```bash
-# Using Docker (recommended)
-docker run -d --name redis -p 6379:6379 redis:alpine
-
-# Or using Homebrew (macOS)
-brew install redis
-brew services start redis
-```
-
-5. Run the development server:
+4. Run the development server:
 
 ```bash
 pnpm dev
@@ -111,7 +94,6 @@ yogabot2/
 │   ├── constants.ts              # App constants and instructions
 │   ├── knowledge.ts              # Knowledge base management
 │   ├── rateLimit.ts              # Rate limiting logic
-│   ├── redis.ts                  # Redis client and functions
 │   └── utils.ts                  # Utility functions
 └── public/                       # Static assets
 ```
@@ -134,7 +116,6 @@ Manages chat state including:
 
 - Message history
 - Typing indicators
-- Redis integration
 - Auto-scrolling behavior
 - Session management
 

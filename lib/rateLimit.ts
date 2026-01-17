@@ -1,9 +1,10 @@
 import type { NextRequest } from "next/server";
-import {
-  checkRateLimit as redisCheckRateLimit,
-  checkOpenAIRateLimit as redisCheckOpenAIRateLimit,
-  type RateLimitResult,
-} from "@/lib/redis";
+
+export interface RateLimitResult {
+  limited: boolean;
+  remaining: number;
+  resetMs: number;
+}
 
 const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || "150");
 const RATE_LIMIT_WINDOW_MS = parseInt(
@@ -30,15 +31,20 @@ export async function checkRateLimit(
   request: NextRequest,
   sessionId?: string
 ): Promise<RateLimitResult> {
-  const key = getClientKey(request, sessionId);
-  return await redisCheckRateLimit(key, RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS);
+  getClientKey(request, sessionId);
+  return {
+    limited: false,
+    remaining: RATE_LIMIT_MAX,
+    resetMs: RATE_LIMIT_WINDOW_MS,
+  };
 }
 
 export async function checkOpenAIRateLimit(): Promise<RateLimitResult> {
-  return await redisCheckOpenAIRateLimit(
-    OPENAI_RATE_LIMIT_MAX,
-    OPENAI_RATE_LIMIT_WINDOW_MS
-  );
+  return {
+    limited: false,
+    remaining: OPENAI_RATE_LIMIT_MAX,
+    resetMs: OPENAI_RATE_LIMIT_WINDOW_MS,
+  };
 }
 
 export const rateLimitHeaders = (result: RateLimitResult) => ({

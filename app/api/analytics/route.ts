@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getChatAnalytics } from "@/lib/redis";
 
 // Define types for analytics data
 interface ChatAnalyticsItem {
@@ -17,13 +16,11 @@ interface ChatAnalyticsItem {
 
 export async function GET(request: NextRequest) {
   try {
-    // Get query parameters
-    const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get("limit") || "100");
+    // Get query parameters (ignored since storage is disabled)
+    new URL(request.url);
 
-    // Get analytics data
-    const analytics = await getChatAnalytics(limit);
-    const filteredAnalytics = analytics;
+    // Analytics storage disabled
+    const filteredAnalytics: ChatAnalyticsItem[] = [];
 
     // Calculate summary statistics
     const summary = {
@@ -48,6 +45,7 @@ export async function GET(request: NextRequest) {
       analytics: filteredAnalytics,
       summary,
       timestamp: new Date().toISOString(),
+      message: "Analytics storage disabled.",
     });
   } catch (error) {
     console.error("Error retrieving analytics:", error);

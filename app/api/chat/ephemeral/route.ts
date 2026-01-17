@@ -1,15 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { KnowledgeManager } from "@/lib/knowledge";
-import {
-  checkRateLimit,
-  rateLimitHeaders,
-  checkOpenAIRateLimit,
-  openAIRateLimitHeaders,
-} from "@/lib/rateLimit";
+import { checkRateLimit, checkOpenAIRateLimit } from "@/lib/rateLimit";
 import { IMPORTANT_INSTRUCTIONS } from "@/lib/constants";
-import { sanitizeIP, hashIP } from "@/lib/utils";
-import { storeChatAnalytics, ChatAnalytics } from "@/lib/redis";
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -17,32 +10,9 @@ const client = new OpenAI({
 
 const knowledgeManager = new KnowledgeManager();
 
-// Helper function to get client IP address
-const getClientIP = (request: NextRequest): string => {
-  // Try to get IP from various headers
-  const forwarded = request.headers.get("x-forwarded-for");
-  const realIP = request.headers.get("x-real-ip");
-  const cfConnectingIP = request.headers.get("cf-connecting-ip");
-
-  let clientIP = "unknown";
-
-  if (forwarded) {
-    clientIP = forwarded.split(",")[0].trim();
-  } else if (realIP) {
-    clientIP = realIP;
-  } else if (cfConnectingIP) {
-    clientIP = cfConnectingIP;
-  }
-
-  // Sanitize and validate the IP address
-  return sanitizeIP(clientIP);
-};
-
 export async function POST(request: NextRequest) {
   try {
-    const { message, conversationHistory, sessionId, analyticsData } =
-      await request.json();
-    const clientIP = getClientIP(request);
+    const { message, conversationHistory, sessionId } = await request.json();
 
     // Enforce rate limit per session (fallback to IP)
     const rl = await checkRateLimit(request, sessionId);
@@ -54,7 +24,6 @@ export async function POST(request: NextRequest) {
         },
         {
           status: 429,
-          headers: rateLimitHeaders(rl),
         }
       );
     }
@@ -69,7 +38,6 @@ export async function POST(request: NextRequest) {
         },
         {
           status: 503,
-          headers: openAIRateLimitHeaders(openAIRateLimit),
         }
       );
     }
@@ -104,39 +72,7 @@ Please provide helpful, accurate responses based on this information. Keep your 
       .replace(/\s+$/gm, "")
       .trim();
 
-    // NOTE: No bot message storage in Redis for ephemeral chat
-    // But we do collect analytics data for business insights
-
-    // Store analytics data if provided
-    if (analyticsData) {
-      try {
-        const hashedIP = await hashIP(clientIP);
-        const analytics: ChatAnalytics = {
-          id: `${sessionId}_${Date.now()}`,
-          timestamp: new Date().toISOString(),
-          messageCount: analyticsData.messageCount || 1,
-          sessionDuration: analyticsData.sessionDuration,
-          quickActionsUsed: analyticsData.quickActionsUsed || [],
-          conversation: analyticsData.conversation || [
-            {
-              role: "user",
-              content: message,
-              timestamp: new Date().toISOString(),
-            },
-            {
-              role: "bot",
-              content: reply,
-              timestamp: new Date().toISOString(),
-            },
-          ],
-          ipHash: hashedIP,
-        };
-        await storeChatAnalytics(analytics);
-      } catch (error) {
-        console.error("Error storing ephemeral analytics:", error);
-        // Don't fail the request if analytics storage fails
-      }
-    }
+    // NOTE: No persistence for ephemeral chat
 
     return NextResponse.json({ reply });
   } catch (error) {
